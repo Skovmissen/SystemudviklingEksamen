@@ -11,10 +11,16 @@ namespace BudgetManagerXame.Controllers
     public class TempController : Controller
     {
         // GET: Temp
-        public ActionResult Delete(Budget budget)
+        [HttpGet]
+        public ActionResult Delete(int id)
         {
-            
             return View();
+        }
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirm(int id)
+        {
+            DB.Delete(id);
+            return RedirectToAction("Index");
         }
     }
 }
