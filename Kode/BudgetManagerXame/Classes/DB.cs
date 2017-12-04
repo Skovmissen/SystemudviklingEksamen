@@ -134,6 +134,24 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+        public static DataTable GetAllBudgets(string fiscalId) // Lavet af Lasse
+        {
+            OpenDb();
+            DataTable dt = new DataTable();
+            SqlDataAdapter command = new SqlDataAdapter("SELECT * From Budget WHERE FiscalID = @FiscalId ", connection);
+            command.SelectCommand.Parameters.AddWithValue("@FiscalId", fiscalId);
+
+            try
+            {
+                command.Fill(dt);
+                CloseDb();
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
         private static SqlParameter CreateParam(string name, object value, SqlDbType type)
