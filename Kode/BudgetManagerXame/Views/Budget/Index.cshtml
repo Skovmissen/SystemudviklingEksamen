@@ -1,9 +1,10 @@
-﻿
+﻿@model BudgetManagerXame.Models.Budget
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
-
+<h3>@ViewBag.Token</h3>
+<h3>@ViewBag.Id</h3>
 @Html.ActionLink("Slet", "Delete", new { id = 5 })
 
