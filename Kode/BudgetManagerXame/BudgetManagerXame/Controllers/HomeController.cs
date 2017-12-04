@@ -16,11 +16,7 @@ namespace BudgetManagerXame.Controllers
     {
         public ActionResult Index()
         {
-
             ViewBag.Message = "Log venligst ind inden du gør andet!";
-            //GetKonti(data);
-            //GetAccessToken(data);
-
             return View();
         }
         [HttpPost]
@@ -39,8 +35,6 @@ namespace BudgetManagerXame.Controllers
         public void RunLogin(XenaData data)
         {
             GetTokenHelper(data);
-
-
         }
 
         private static Random random = new Random();
@@ -62,7 +56,6 @@ namespace BudgetManagerXame.Controllers
             queryString["response_mode"] = "form_post";
             queryString["json"] = "true";
 
-
             Response.Redirect("https://login.xena.biz/connect/authorize?" + queryString.ToString());
 
         }
@@ -72,16 +65,6 @@ namespace BudgetManagerXame.Controllers
         }
         public static async Task<string> GetAccessTokenHelper(XenaData data)
         {
-            //NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
-
-            //queryString["code"] = data.id_code;
-            //queryString["client_id"] = "630a9884-bf16-4820-9f52-f0c2744fab77.apps.xena.biz";
-            //queryString["redirect_uri"] = "https://budgetmanagerxenaeksamen.azurewebsites.net/";
-            //queryString["client_secret"] = "P8mGkLRKcp8jtoWPlcP7XH9u";
-            //queryString["grant_type"] = "authorization_code";
-            //queryString["response_mode"] = "form_post";
-            //queryString["json"] = "true";
-
             var pairs = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("code", data.id_code),
