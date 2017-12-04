@@ -164,6 +164,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Budget.cs" />
+    <Compile Include="Models\FinanceAccount.cs" />
+    <Compile Include="Models\FinanceAccountPeriod.cs" />
+    <Compile Include="Models\FinanceGroup.cs" />
+    <Compile Include="Models\Period.cs" />
     <Compile Include="Models\XenaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
