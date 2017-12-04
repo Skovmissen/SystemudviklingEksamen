@@ -10,6 +10,6 @@ namespace BudgetManagerXame.Models
         public int AccountId { get; set; }
         public int BudgetId { get; set; }
         public int PeriodId { get; set; }
-        public int Estimate { get; set; }
+        public double Estimate { get; set; }
     }
 }
