@@ -37,7 +37,7 @@ CREATE TABLE FinanceAccountPeriod
 	AccountId INT,
 	BudgetId INT,
 	PeriodId INT,
-	Estimate INT,
+	Estimate FLOAT,
 	FOREIGN KEY (PeriodId) REFERENCES [Period](Id),
 	FOREIGN KEY (AccountId, BudgetId) REFERENCES FinanceAccount (AccountId, BudgetId)	
 )
