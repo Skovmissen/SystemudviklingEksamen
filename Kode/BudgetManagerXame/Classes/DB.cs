@@ -59,7 +59,7 @@ namespace BudgetManagerXame.Classes
         public static void GetBudgetID(Budget budget) // Lavet af Lasse
         {
 
-            SqlCommand command = new SqlCommand("SELECT BudgetId From Budget WHERE FiscalID = @FiscalId ", connection);
+            SqlCommand command = new SqlCommand("SELECT Id From Budget WHERE FiscalID = @FiscalId ", connection);
             command.Parameters.AddWithValue("@FiscalId", budget.Fiscalid);
             try
             {
