@@ -19,7 +19,7 @@ namespace BudgetManagerXame.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirm(int id)
         {
-            DB.Delete(id);
+            DB.DeleteBudget(id);
             return RedirectToAction("Index");
         }
     }

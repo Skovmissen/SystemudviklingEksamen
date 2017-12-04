@@ -90,6 +90,22 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+        public static void DeleteBudget(int id)
+        {
+            SqlCommand command = new SqlCommand("Delete FROM Budget WHERE Id = @id");
+            command.Parameters.AddWithValue("@id", id);
+            try
+            {
+                OpenDb();
+                command.ExecuteNonQuery();
+                CloseDb();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
 
         private static SqlParameter CreateParam(string name, object value, SqlDbType type)
         {
