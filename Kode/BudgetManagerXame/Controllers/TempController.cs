@@ -14,7 +14,6 @@ namespace BudgetManagerXame.Controllers
         [HttpGet]
         public ActionResult Delete(int? id)
         {
-            id = 1;
             Budget budget = DB.GetBudget(id);
             return View(budget);
         }
