@@ -12,17 +12,19 @@ namespace BudgetManagerXame.Controllers
     {
         // GET: Temp
         [HttpGet]
-        public ActionResult Delete(Budget budget)
+        public ActionResult Delete(int? id)
         {
-            budget.Fiscalid = "a";
-            DB.GetBudgetID(budget);
+            id = 1;
+            Budget budget = DB.GetBudget(id);
             return View(budget);
         }
-        [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirm(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirm(int? id)
         {
             DB.DeleteBudget(id);
-            return RedirectToAction("Index");
+            return View("Index");
         }
+
     }
 }

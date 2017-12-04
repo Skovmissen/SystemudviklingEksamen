@@ -55,7 +55,7 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-      
+
         public static void GetBudgetID(Budget budget) // Lavet af Lasse
         {
 
@@ -90,13 +90,14 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static void DeleteBudget(int id)
+        public static void DeleteBudget(int? id)
         {
-            SqlCommand command = new SqlCommand("Delete FROM Budget WHERE Id = @id");
+            OpenDb();
+            SqlCommand command = new SqlCommand("DELETE FROM Budget WHERE Id = @id", connection);
             command.Parameters.AddWithValue("@id", id);
             try
             {
-                OpenDb();
+                
                 command.ExecuteNonQuery();
                 CloseDb();
             }
@@ -106,6 +107,34 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+        public static Budget GetBudget(int? id) // Lavet af Lasse
+        {
+            Budget budget = new Budget();
+            OpenDb();
+            SqlCommand command = new SqlCommand("SELECT * FROM Budget WHERE Id = @Id", connection);
+            command.Parameters.AddWithValue("@Id", id);
+
+            SqlDataReader reader = command.ExecuteReader();
+            try
+            {
+                while (reader.Read())
+                {
+                    budget.Id = Convert.ToInt32(reader["Id"]);
+                    budget.Year = Convert.ToInt32(reader["Year"]);
+                    budget.Description = reader["Description"].ToString();
+                    budget.Fiscalid = reader["FiscalId"].ToString();
+                    
+                }
+                CloseDb();
+                return budget;
+                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         private static SqlParameter CreateParam(string name, object value, SqlDbType type)
         {
