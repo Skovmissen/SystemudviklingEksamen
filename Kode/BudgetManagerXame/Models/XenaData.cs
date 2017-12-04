@@ -11,5 +11,6 @@ namespace BudgetManagerXame.Models
         public string id_code { get; set; }
         public string access_token { get; set; }
         public string token { get; set; }
+        public string Fis_ID { get; set; }
     }
 }
