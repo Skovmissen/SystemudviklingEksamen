@@ -8,6 +8,7 @@
 
 <h3>Er du sikker på du vil slette denne registrering?</h3>
 <div>
+
     <h4>Registring</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -44,13 +45,11 @@
         </dd>
 
     </dl>
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
+@using (Html.BeginForm("DeleteConfirm", "Temp", new { id = Model.Id }))
+{
+    @Html.AntiForgeryToken()
         <div class="form-actions no-color">
-            <input type="submit" value="Slet" class="btn btn-default" /> |
+            <input type="submit" value="Slet" class="btn btn-default"  /> |
             @Html.ActionLink("Tilbage", "Index")
         </div>
     }

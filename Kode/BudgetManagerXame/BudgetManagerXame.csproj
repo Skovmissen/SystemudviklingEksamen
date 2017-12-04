@@ -210,7 +210,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Budget\Index.cshtml" />
     <Content Include="Views\Temp\Delete.cshtml" />
-    <Content Include="Views\Temp\test.cshtml" />
+    <Content Include="Views\Temp\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
