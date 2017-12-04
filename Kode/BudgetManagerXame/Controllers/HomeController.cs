@@ -20,23 +20,26 @@ namespace BudgetManagerXame.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult index(XenaData data)
+        public ActionResult index(Budget budget, XenaData data)
         {
             data.id_code = Request["code"];
 
             GetAccessToken(data);
 
-            HttpCookie myCookie= new HttpCookie("access_token");
-            myCookie.Value = data.access_token;
-            Response.Cookies.Add(myCookie);
+            HttpCookie AccessCookie= new HttpCookie("access_token");
+            AccessCookie.Value = data.access_token;
+            Response.Cookies.Add(AccessCookie);
             ViewBag.Message = "Du er nu logget ind!";
+            GetFiscalId(data, budget);
+            HttpCookie FiscalCookie = new HttpCookie("fiscal_Id");
+            FiscalCookie.Value = budget.Fiscalid;
+            Response.Cookies.Add(FiscalCookie);
             return View(data);
         }
         public void RunLogin(XenaData data)
         {
             GetTokenHelper(data);
         }
-
         private static Random random = new Random();
         public static string RandomString(int length)
         {
@@ -90,6 +93,28 @@ namespace BudgetManagerXame.Controllers
 
             return json["access_token"].ToString();
         }
+        public static string GetFiscalId(XenaData data, Budget budget)
+        {
+            return GetFiscalIdHelper(data, budget).Result;
+        }
+        public static async Task<string> GetFiscalIdHelper(XenaData data, Budget budget)
+        {
+            var pairs = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("Authorization", "Bearer " + data.access_token),
+            };
+            var content = new FormUrlEncodedContent(pairs);
+            var client = new HttpClient();
 
+            var response = client.GetAsync("https://my.xena.biz/Api/User/XenaUserMembership?" + content).Result;
+
+            string result = await response.Content.ReadAsStringAsync();
+
+            JObject json = JObject.Parse(result);
+
+            budget.Fiscalid = json["FiscalId"].ToString();
+
+            return json["FiscalId"].ToString();
+        }
     }
 }
