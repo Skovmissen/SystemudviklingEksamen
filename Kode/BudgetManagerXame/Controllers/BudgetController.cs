@@ -28,9 +28,9 @@ namespace BudgetManagerXame.Controllers
             budget.Fiscalid = FiscalId.ToString();
             ViewBag.ID = FiscalId;
 
-            DataTable dt = DB.GetAllBudgets(FiscalId);
-            List<DataRow> budgets = dt.AsEnumerable().ToList();
-            ViewBag.BudgetList = budgets;
+            DataTable dt = DB.GetAllBudgets(FiscalId.ToString());
+            budget.BudgetList = dt.AsEnumerable().ToList();
+
             return View(budget);
 
         }
@@ -55,18 +55,49 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Budget/Create
-        public ActionResult Create()
+        public  ActionResult Create(Budget budget)
         {
-            return View();
+      
+
+
+
+            return View(budget);
+        }
+        public async Task<string> GetFinanceAccounts()
+        {
+            string token = Request.Cookies["access_token"].Value;
+
+            HttpClient _client = new HttpClient();
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string content = await _client.GetStringAsync("https://my.xena.biz/Api/Fiscal/98512/LedgerSearch/FullList?ForceNoPaging=true&Page=0&PageSize=10&ShowDeactivated=false&_=1512459901335");
+
+            return content;
+
         }
 
         // POST: Budget/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public async Task<ActionResult> Create(FormCollection collection, Budget budget)
         {
             try
             {
-                // TODO: Add insert logic here
+                budget.Year = int.Parse(Request.Form["Year"]);
+                budget.Description = Request.Form["Description"];
+
+                budget.Id = DB.CreateBudget(budget);
+
+                var content = await GetFinanceAccounts();
+
+                JObject jsonContent = JObject.Parse(content);
+                for (int i = 0; i < content.Length; i++)
+                {
+
+                    var FinanceAccountId = jsonContent["Entities"][i]["AccountNumber"];
+                    var FinanceAccountDesc = jsonContent["Entities"][i]["Description"];
+                    var LedgerAccoount = jsonContent["Entities"][i]["LedgerAccount"];
+                    DB.CreateFinanceAccounts(FinanceAccountId, FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
+                }
 
                 return RedirectToAction("Index");
             }
