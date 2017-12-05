@@ -155,6 +155,25 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+        public static string GetFinanceGroupName(string LedgerAccount) // Lavet af Lasse
+        {
+            OpenDb();
+            string name = "";
+            SqlCommand command = new SqlCommand("SELECT Name FROM FinanceGroup WHERE LedgerAccount = @LedgerAccount", connection);
+            
+            command.Parameters.AddWithValue("@LedgerAccount", LedgerAccount);
+ 
+            try
+            {
+                name = command.ExecuteScalar().ToString();
+                CloseDb();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return name;
+        }
 
 
         private static SqlParameter CreateParam(string name, object value, SqlDbType type)
