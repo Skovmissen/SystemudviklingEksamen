@@ -41,7 +41,7 @@ namespace BudgetManagerXame.Classes
         {
             OpenDb();
             object id;
-            SqlCommand command = new SqlCommand("INSERT INTO Budget (Year, Description, FiscalId) VALUES (@Year, @Description, @FiscalId); SELECT SCOPE_IDENTITY();", connection);
+            SqlCommand command = new SqlCommand("INSERT INTO Budget ([Year], [Description], FiscalId) VALUES (@Year, @Description, @FiscalId); SELECT SCOPE_IDENTITY();", connection);
             command.Parameters.Add(CreateParam("@Year", budget.Year, SqlDbType.Int));
             command.Parameters.Add(CreateParam("@Description", budget.Description, SqlDbType.NVarChar));
             command.Parameters.Add(CreateParam("@FiscalId", budget.Fiscalid, SqlDbType.Int));
