@@ -6,6 +6,7 @@ using BudgetManagerXame.Models;
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.Http;
+using System.Collections.Generic;
 
 namespace BudgetManagerXame.Classes
 {
@@ -176,75 +177,79 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static DataTable GetAllBudgetsById(int Id) // Lavet af Lasse
+        public static List<Period> GetAllPeriods() // Lavet af Lasse
         {
             OpenDb();
-            DataTable dt = new DataTable();
-            SqlDataAdapter command = new SqlDataAdapter("SELECT * From Budget WHERE BudgetId = @id ", connection);
-            command.SelectCommand.Parameters.AddWithValue("@id", Id);
+            List<Period> Periods = new List<Period>();
+            SqlCommand command = new SqlCommand("SELECT * From Period", connection);
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Period p = new Period();
+                    p.Id = (int) reader["Id"];
+                    p.Name = (string)reader["Name"];
+                    Periods.Add(p);
+                }
+                CloseDb();
+                return Periods;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
+        public static List<FinanceAccount> GetAllFinanceAccounts(int id) // Lavet af Lasse
+        {
+            OpenDb();
+            List<FinanceAccount> Accounts = new List<FinanceAccount>();
+            SqlCommand command = new SqlCommand("SELECT * From FinanceAccount WHERE BudgetId = @BudgetId", connection);
+            command.Parameters.AddWithValue("@BudgetId", id);
             try
             {
-                command.Fill(dt);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    FinanceAccount p = new FinanceAccount();
+                    p.AccountId = (int)reader["AccountId"];
+                    p.Name = (string)reader["Name"];
+                    p.FinanceGroup = (string)reader["FinancegroupName"];
+                    p.BudgetId = (int)reader["BudgetId"];
+                    Accounts.Add(p);
+                }
                 CloseDb();
-                return dt;
+                return Accounts;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-        public static DataTable GetAllPeriods() // Lavet af Lasse
+        public static List<FinanceGroup> GetAllFinanceGroups() // Lavet af Lasse
         {
             OpenDb();
-            DataTable dt = new DataTable();
-            SqlDataAdapter command = new SqlDataAdapter("SELECT * From Period", connection);
+            List<FinanceGroup> FinanceGroups = new List<FinanceGroup>();
+            SqlCommand command = new SqlCommand("SELECT * From FinanceGroup", connection);
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    FinanceGroup p = new FinanceGroup();
+                    p.Name = (string)reader["Name"];
+                    FinanceGroups.Add(p);
+                }
+                CloseDb();
+                return FinanceGroups;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
-            try
-            {
-                command.Fill(dt);
-                CloseDb();
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public static DataTable GetAllFinanceGroups() // Lavet af Lasse
-        {
-            OpenDb();
-            DataTable dt = new DataTable();
-            SqlDataAdapter command = new SqlDataAdapter("SELECT * From FinanceGroup", connection);
-
-            try
-            {
-                command.Fill(dt);
-                CloseDb();
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public static DataTable GetAllFinanceAccounts(int budgetId) // Lavet af Lasse
-        {
-            OpenDb();
-            DataTable dt = new DataTable();
-            SqlDataAdapter command = new SqlDataAdapter("SELECT * From FinanceAccount WHERE BudgetId = @BudgetId", connection);
-            command.SelectCommand.Parameters.AddWithValue("@BudgetId", budgetId);
-            try
-            {
-                command.Fill(dt);
-                CloseDb();
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
         public static string GetFinanceGroupName(string LedgerAccount) // Lavet af Lasse
         {
