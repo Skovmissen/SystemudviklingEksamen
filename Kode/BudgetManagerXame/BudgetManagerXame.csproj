@@ -219,10 +219,10 @@
     <Content Include="Views\Budget\Create.cshtml" />
     <Content Include="Views\Budget\Error.cshtml" />
     <Content Include="Views\Budget\Delete.cshtml" />
+    <Content Include="Views\Estimate\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Estimate\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

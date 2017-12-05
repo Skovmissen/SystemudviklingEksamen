@@ -8,5 +8,6 @@ namespace BudgetManagerXame.Models
     public class FinanceGroup
     {
         public string Name { get; set; }
+        public double Result { get; set; }
     }
 }

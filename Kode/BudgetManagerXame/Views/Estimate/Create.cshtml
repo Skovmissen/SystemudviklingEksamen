@@ -1,0 +1,47 @@
+﻿@model BudgetManagerXame.Models.Estimate
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm())
+{
+    <table class="table">
+        <tr>
+            <th>
+
+            </th>
+            <th>@Html.DropDownListFor(model => model.Period, new SelectList(Model.Period, "Id", "Name"), "- Please Select -")</th>
+        </tr>
+        @for (int i = 0; i < Model.FinanceGroup.Count; i++)
+        {
+            <tr>
+                <td>
+                    <b>@Html.DisplayFor(m => m.FinanceGroup[i].Name)</b>
+                </td>
+                
+
+            </tr>
+
+            for (int j = 0; j < Model.FinanceAccount.Count; j++)
+            {
+                <tr>
+                    @if (Model.FinanceAccount[j].FinanceGroup == Model.FinanceGroup[i].Name)
+                    {
+                        <td>@Html.DisplayFor(m => m.FinanceAccount[j].Name)</td>
+                        <td>@Html.TextBoxFor(m => m.Fap[j].Estimate)</td>
+                    }
+                    
+                </tr>
+            }
+        }
+    </table>
+    <input type="submit" value="Opret" class="btn btn-default" />
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

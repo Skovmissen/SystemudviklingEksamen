@@ -8,11 +8,12 @@ namespace BudgetManagerXame.Models
 {
     public class Estimate
     {
-        public IEnumerable<Period> Period { get; set; }
-        public IEnumerable<Budget> Budget { get; set; }
-        public IEnumerable<FinanceAccount> FinanceAccount { get; set; }
-        public IEnumerable<FinanceGroup> FinanceGroup { get; set; }
-        public IEnumerable<FinanceAccountPeriod> FinanceAccountPeriod { get; set; }
+        public IList<Period> Period { get; set; }
+        public IList<Budget> Budget { get; set; }
+        public IList<FinanceAccount> FinanceAccount { get; set; }
+        public IList<FinanceGroup> FinanceGroup { get; set; }
+        public IList<FinanceAccountPeriod> Fap { get; set; }
+        public int[] Data { get; set; }
 
     }
 }
