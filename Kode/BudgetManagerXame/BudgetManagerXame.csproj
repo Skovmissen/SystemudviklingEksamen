@@ -211,6 +211,7 @@
     <Content Include="Views\Budget\Index.cshtml" />
     <Content Include="Views\Temp\Delete.cshtml" />
     <Content Include="Views\Temp\Index.cshtml" />
+    <Content Include="Views\Budget\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
