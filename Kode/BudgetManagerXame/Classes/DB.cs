@@ -93,6 +93,26 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+        public static void InsertDataInBudget(Budget budget, Period period, FinanceAccount account, FinanceAccountPeriod FAP) // Lavet af Lasse
+        {
+            OpenDb();
+            SqlCommand command = new SqlCommand("INSERT INTO FinanceAccountPeriod (AccountId, BudgetId, PeriodId, Estimate) VALUES (@AccountId, @BudgetId, @PeriodId, @Estimate)", connection);
+
+            command.Parameters.Add(CreateParam("@AccountId", account.AccountId, SqlDbType.Int));
+            command.Parameters.Add(CreateParam("@PeriodId", period.Id, SqlDbType.NVarChar));
+            command.Parameters.Add(CreateParam("@Estimate", FAP.Estimate, SqlDbType.NVarChar));
+            command.Parameters.Add(CreateParam("@BudgetId", budget.Id, SqlDbType.Int));
+            try
+            {
+
+                command.ExecuteNonQuery();
+                CloseDb();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public static void DeleteBudget(int? id)
         {
             OpenDb();
@@ -155,6 +175,58 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+        public static DataTable GetAllPeriods() // Lavet af Lasse
+        {
+            OpenDb();
+            DataTable dt = new DataTable();
+            SqlDataAdapter command = new SqlDataAdapter("SELECT * From Period", connection);
+
+            try
+            {
+                command.Fill(dt);
+                CloseDb();
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static DataTable GetAllFinanceGroups() // Lavet af Lasse
+        {
+            OpenDb();
+            DataTable dt = new DataTable();
+            SqlDataAdapter command = new SqlDataAdapter("SELECT * From FinanceGroup", connection);
+
+            try
+            {
+                command.Fill(dt);
+                CloseDb();
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static DataTable GetAllFinanceAccounts(int budgetId) // Lavet af Lasse
+        {
+            OpenDb();
+            DataTable dt = new DataTable();
+            SqlDataAdapter command = new SqlDataAdapter("SELECT * From FinanceAccount WHERE BudgetId = @BudgetId", connection);
+            command.SelectCommand.Parameters.AddWithValue("@BudgetId", budgetId);
+            try
+            {
+                command.Fill(dt);
+                CloseDb();
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static string GetFinanceGroupName(string LedgerAccount) // Lavet af Lasse
         {
             OpenDb();
