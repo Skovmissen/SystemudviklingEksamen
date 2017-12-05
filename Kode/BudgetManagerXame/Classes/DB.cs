@@ -158,14 +158,28 @@ namespace BudgetManagerXame.Classes
         public static string GetFinanceGroupName(string LedgerAccount) // Lavet af Lasse
         {
             OpenDb();
+            DataTable dt = new DataTable();
             string name = "";
-            SqlCommand command = new SqlCommand("SELECT Name FROM FinanceGroup WHERE LedgerAccount = @LedgerAccount", connection);
-            
-            command.Parameters.AddWithValue("@LedgerAccount", LedgerAccount);
+            SqlDataAdapter command = new SqlDataAdapter("SELECT Name FROM FinanceGroup WHERE LedgerAccount = @LedgerAccount", connection);
+
+            command.SelectCommand.Parameters.AddWithValue("@LedgerAccount", LedgerAccount);
  
             try
             {
-                name = command.ExecuteScalar().ToString();
+                command.Fill(dt);
+                if (dt.Rows.Count != 0)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        name = row["Name"].ToString();
+                    }
+                }
+                else
+                {
+                    name = "";
+                }
+               
+                
                 CloseDb();
             }
             catch (Exception ex)

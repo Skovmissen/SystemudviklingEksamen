@@ -8,6 +8,7 @@ using BudgetManagerXame.Classes;
 using System.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace BudgetManagerXame.Controllers
 {
@@ -55,38 +56,10 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Budget/Create
-        public async Task<ActionResult> Create(Budget budget)
+        public ActionResult Create(Budget budget)
         {
-            var FinanceAccountId = "";
-            var LedgerAccoount = "";
-            var FinanceAccountDesc = "";
-            var content = await GetFinanceAccounts();
-
-            JObject jsonContent = JObject.Parse(content);
-            int items = jsonContent["Entities"].Count();
-
-            for (int i = 0; i < items; i++)
-            {
-
-                FinanceAccountId = jsonContent["Entities"][i]["AccountNumber"].ToString();
-                FinanceAccountDesc = jsonContent["Entities"][i]["Description"].ToString();
-                LedgerAccoount = jsonContent["Entities"][i]["LedgerAccount"].ToString();
-                LedgerAccoount = DB.GetFinanceGroup(LedgerAccoount);
-                if (FinanceAccountId == "")
-                {
-                    FinanceAccountId = "1";
-                    DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
-                }
-                else
-                {
-                    DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
-                }
-
-
-            }
-            ViewBag.test = FinanceAccountId;
-            ViewBag.Ledger = LedgerAccoount;
-            ViewBag.count = items;
+            
+          
             return View(budget);
         }
         public async Task<string> GetFinanceAccounts()
@@ -113,14 +86,45 @@ namespace BudgetManagerXame.Controllers
 
                 budget.Id = DB.CreateBudget(budget);
 
+                var FinanceAccountId = "";
+                var LedgerAccoount = "";
+                var FinanceAccountDesc = "";
+                var content = await GetFinanceAccounts();
 
+                JObject jsonContent = JObject.Parse(content);
+                int items = jsonContent["Entities"].Count();
+
+                for (int i = 0; i < items; i++)
+                {
+
+                    FinanceAccountId = jsonContent["Entities"][i]["AccountNumber"].ToString();
+                    FinanceAccountDesc = jsonContent["Entities"][i]["Description"].ToString();
+                    LedgerAccoount = jsonContent["Entities"][i]["LedgerAccount"].ToString();
+                    LedgerAccoount = DB.GetFinanceGroupName(LedgerAccoount);
+                    if (FinanceAccountId == "" || FinanceAccountDesc == "" || LedgerAccoount == "" || LedgerAccoount == "tom")
+                    {
+                        //ingen oprettelse uden _ID
+                    }
+                    else
+                    {
+                        DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
+                    }
+
+
+                }
 
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception e)
             {
-                return View();
+                
+                return RedirectToAction("Error", e);
             }
+        }
+        public ActionResult Error(Exception e)
+        {
+            ViewBag.error = e;
+            return View();
         }
 
         // GET: Budget/Edit/5
