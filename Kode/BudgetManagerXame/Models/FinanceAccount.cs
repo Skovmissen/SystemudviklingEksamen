@@ -10,6 +10,6 @@ namespace BudgetManagerXame.Models
         public int AccountId { get; set; }
         public string Name { get; set; }
         public string FinanceGroup { get; set; }
-        public string BudgetId { get; set; }
+        public int BudgetId { get; set; }
     }
 }
