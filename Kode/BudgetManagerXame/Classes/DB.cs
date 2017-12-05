@@ -176,6 +176,24 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+        public static DataTable GetAllBudgetsById(int Id) // Lavet af Lasse
+        {
+            OpenDb();
+            DataTable dt = new DataTable();
+            SqlDataAdapter command = new SqlDataAdapter("SELECT * From Budget WHERE BudgetId = @id ", connection);
+            command.SelectCommand.Parameters.AddWithValue("@id", Id);
+
+            try
+            {
+                command.Fill(dt);
+                CloseDb();
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public static DataTable GetAllPeriods() // Lavet af Lasse
         {
             OpenDb();
