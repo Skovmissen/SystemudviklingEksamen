@@ -13,7 +13,7 @@ namespace BudgetManagerXame.Controllers
 {
     public class BudgetController : Controller
     {
-
+        // Lavet af Nikolaj
         // GET: Budget
 
         public async Task<ActionResult> Index(Budget budget)
@@ -96,7 +96,7 @@ namespace BudgetManagerXame.Controllers
                     var FinanceAccountId = jsonContent["Entities"][i]["AccountNumber"];
                     var FinanceAccountDesc = jsonContent["Entities"][i]["Description"];
                     var LedgerAccoount = jsonContent["Entities"][i]["LedgerAccount"];
-                    DB.CreateFinanceAccounts(FinanceAccountId, FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
+                    DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
                 }
 
                 return RedirectToAction("Index");
