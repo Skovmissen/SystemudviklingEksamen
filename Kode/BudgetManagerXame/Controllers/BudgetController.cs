@@ -131,7 +131,11 @@ namespace BudgetManagerXame.Controllers
         public ActionResult Edit(int id)
         {
             Estimate estimate = new Estimate();
-            estimate.Budget = DB.GetAllBudgetsById(id);
+
+            estimate.Period = DB.GetAllPeriods();
+            estimate.FinanceAccount = DB.GetAllFinanceAccounts(id);
+            estimate.FinanceGroup = DB.GetAllFinanceGroups();
+            
             
             return View(estimate);
         }
