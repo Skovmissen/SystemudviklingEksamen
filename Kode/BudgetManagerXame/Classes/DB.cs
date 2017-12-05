@@ -46,6 +46,7 @@ namespace BudgetManagerXame.Classes
             command.Parameters.Add(CreateParam("@Year", budget.Year, SqlDbType.Int));
             command.Parameters.Add(CreateParam("@Description", budget.Description, SqlDbType.NVarChar));
             command.Parameters.Add(CreateParam("@FiscalId", budget.Fiscalid, SqlDbType.Int));
+             
             try
             {
                 id = command.ExecuteScalar(); 

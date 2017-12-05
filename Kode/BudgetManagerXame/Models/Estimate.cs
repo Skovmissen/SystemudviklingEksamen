@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -7,11 +8,11 @@ namespace BudgetManagerXame.Models
 {
     public class Estimate
     {
-        public List<Period> Period { get; set; }
-        public List<Budget> Budget { get; set; }
-        public List<FinanceAccount> FinanceAccount { get; set; }
-        public List<FinanceGroup> FinanceGroup { get; set; }
-        public List<FinanceAccountPeriod> FinanceAccountPeriod { get; set; }
+        public IEnumerable<Period> Period { get; set; }
+        public IEnumerable<Budget> Budget { get; set; }
+        public IEnumerable<FinanceAccount> FinanceAccount { get; set; }
+        public IEnumerable<FinanceGroup> FinanceGroup { get; set; }
+        public IEnumerable<FinanceAccountPeriod> FinanceAccountPeriod { get; set; }
 
     }
 }
