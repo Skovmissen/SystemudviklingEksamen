@@ -1,14 +1,13 @@
 ﻿using BudgetManagerXame.Models;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
+using BudgetManagerXame.Classes;
+using System.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BudgetManagerXame.Controllers
 {
@@ -25,20 +24,24 @@ namespace BudgetManagerXame.Controllers
 
             var FiscalId = jsonContent["Entities"][0];
             FiscalId = jsonContent["Entities"][0]["FiscalSetupId"];
+
             budget.Fiscalid = FiscalId.ToString();
             ViewBag.ID = FiscalId;
-            return View();
+
+            DataTable dt = DB.GetAllBudgets(FiscalId);
+            List<DataRow> budgets = dt.AsEnumerable().ToList();
+            ViewBag.BudgetList = budgets;
+            return View(budget);
 
         }
         public async Task<string> GetJsonString()
         {
             string token = Request.Cookies["access_token"].Value;
+
             HttpClient _client = new HttpClient();
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string content = await _client.GetStringAsync("https://my.xena.biz/Api/User/XenaUserMembership?ForceNoPaging=true&Page=0&PageSize=10&ShowDeactivated=false");
-
-
 
             return content;
 
@@ -48,6 +51,7 @@ namespace BudgetManagerXame.Controllers
         public ActionResult Details(int id)
         {
             return View();
+
         }
 
         // GET: Budget/Create

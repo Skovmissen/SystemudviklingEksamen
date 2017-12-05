@@ -1,10 +1,42 @@
-﻿@model BudgetManagerXame.Models.Budget
+﻿@model IEnumerable<BudgetManagerXame.Models.Budget>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Budgets";
 }
 
-<h2>Index</h2>
-<h3>@ViewBag.Token</h3>
-<h3>@ViewBag.Id</h3>
+<h2>Budgetter for virksomheden med fiscal id: @ViewBag.ID</h2>
+
+
+<div class="row">
+    
+            <table>
+                <tr>
+                   <th>
+                       <p>År</p>
+                   </th>
+                    <th>
+                        <p>Beskrivelse</p>
+                    </th>
+                </tr>
+               @foreach (var item in Model)
+                {
+                   <tr>
+                       <td>
+                           @Html.Display(item.Year.ToString());
+                       </td>
+                       <td>
+                           @Html.Display(item.Description);
+                       </td>
+                   </tr>
+                }
+            </table>
+        
+    
+  
+</div>
+
+
+
+
+
 @Html.ActionLink("Slet", "Delete", new { id = 5 })
 
