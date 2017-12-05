@@ -55,12 +55,38 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Budget/Create
-        public  ActionResult Create(Budget budget)
+        public async Task<ActionResult> Create(Budget budget)
         {
-      
+            var FinanceAccountId = "";
+            var LedgerAccoount = "";
+            var FinanceAccountDesc = "";
+            var content = await GetFinanceAccounts();
+
+            JObject jsonContent = JObject.Parse(content);
+            int items = jsonContent["Entities"].Count();
+
+            for (int i = 0; i < items; i++)
+            {
+
+                FinanceAccountId = jsonContent["Entities"][i]["AccountNumber"].ToString();
+                FinanceAccountDesc = jsonContent["Entities"][i]["Description"].ToString();
+                LedgerAccoount = jsonContent["Entities"][i]["LedgerAccount"].ToString();
+                LedgerAccoount = DB.GetFinanceGroup(LedgerAccoount);
+                if (FinanceAccountId == "")
+                {
+                    FinanceAccountId = "1";
+                    DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
+                }
+                else
+                {
+                    DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
+                }
 
 
-
+            }
+            ViewBag.test = FinanceAccountId;
+            ViewBag.Ledger = LedgerAccoount;
+            ViewBag.count = items;
             return View(budget);
         }
         public async Task<string> GetFinanceAccounts()
@@ -87,17 +113,7 @@ namespace BudgetManagerXame.Controllers
 
                 budget.Id = DB.CreateBudget(budget);
 
-                var content = await GetFinanceAccounts();
 
-                JObject jsonContent = JObject.Parse(content);
-                for (int i = 0; i < content.Length; i++)
-                {
-
-                    var FinanceAccountId = jsonContent["Entities"][i]["AccountNumber"];
-                    var FinanceAccountDesc = jsonContent["Entities"][i]["Description"];
-                    var LedgerAccoount = jsonContent["Entities"][i]["LedgerAccount"];
-                    DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
-                }
 
                 return RedirectToAction("Index");
             }
