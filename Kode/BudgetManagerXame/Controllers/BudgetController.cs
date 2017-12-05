@@ -150,25 +150,18 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Budget/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            Budget budget = DB.GetBudget(id);
+            return View(budget);
         }
 
         // POST: Budget/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult DeleteConfirm(int? id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            DB.DeleteBudget(id);
+            return View("Index");
         }
     }
 }
