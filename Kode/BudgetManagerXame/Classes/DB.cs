@@ -37,23 +37,24 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static void CreateBudget(Budget budget) // Lavet af Lasse
+        public static int CreateBudget(Budget budget) // Lavet af Lasse
         {
-
-            SqlCommand command = new SqlCommand("INSERT INTO Budget (Year, Description, FiscalId) VALUES (@Year, @Description, @FiscalId)", connection);
+            OpenDb();
+            object id;
+            SqlCommand command = new SqlCommand("INSERT INTO Budget (Year, Description, FiscalId) VALUES (@Year, @Description, @FiscalId); SELECT SCOPE_IDENTITY();", connection);
             command.Parameters.Add(CreateParam("@Year", budget.Year, SqlDbType.Int));
             command.Parameters.Add(CreateParam("@Description", budget.Description, SqlDbType.NVarChar));
             command.Parameters.Add(CreateParam("@FiscalId", budget.Fiscalid, SqlDbType.Int));
             try
             {
-                OpenDb();
-                command.ExecuteNonQuery();
+                id = command.ExecuteScalar(); 
                 CloseDb();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            return Convert.ToInt32(id);
         }
 
         public static void GetBudgetID(Budget budget) // Lavet af Lasse
@@ -72,16 +73,18 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static void CreateFinanceAccounts(Budget budget, FinanceAccount FA) // Lavet af Lasse
+        public static void CreateFinanceAccounts(int id, string name, string ledgerAccount, Budget budget) // Lavet af Lasse
         {
-            SqlCommand command = new SqlCommand("INSERT INTO FinanceAccount (Name, FinancegroupName, AccountId) VALUES (@Name, @FinancegroupName, @AccountId) WHERE BudgetId = @BudgetId", connection);
-            command.Parameters.Add(CreateParam("@Name", FA.Name, SqlDbType.NVarChar));
-            command.Parameters.Add(CreateParam("@FinancegroupName", FA.FinanceGroup, SqlDbType.NVarChar));
-            command.Parameters.Add(CreateParam("@AccountId", FA.AccountId, SqlDbType.Int));
-            command.Parameters.Add(CreateParam("@BudgetId", FA.BudgetId, SqlDbType.Int));
+            OpenDb();
+            SqlCommand command = new SqlCommand("IF NOT EXISTS (SELECT * FROM FinanceAccount WHERE AccountId = @AccountId AND BudgetId = @BudgetId) INSERT INTO FinanceAccount (AccountId, Name, FinancegroupName, BudgetId) VALUES (@AccountId, @Name, @FinancegroupName, @BudgetId)", connection);
+
+            command.Parameters.Add(CreateParam("@AccountId", id, SqlDbType.Int));
+            command.Parameters.Add(CreateParam("@Name", name, SqlDbType.NVarChar));
+            command.Parameters.Add(CreateParam("@FinancegroupName", ledgerAccount, SqlDbType.NVarChar));
+            command.Parameters.Add(CreateParam("@BudgetId", budget.Id, SqlDbType.Int));
             try
             {
-                OpenDb();
+
                 command.ExecuteNonQuery();
                 CloseDb();
             }
@@ -97,7 +100,7 @@ namespace BudgetManagerXame.Classes
             command.Parameters.AddWithValue("@id", id);
             try
             {
-                
+
                 command.ExecuteNonQuery();
                 CloseDb();
             }
@@ -123,11 +126,11 @@ namespace BudgetManagerXame.Classes
                     budget.Year = Convert.ToInt32(reader["Year"]);
                     budget.Description = reader["Description"].ToString();
                     budget.Fiscalid = reader["FiscalId"].ToString();
-                    
+
                 }
                 CloseDb();
                 return budget;
-                
+
             }
             catch (Exception ex)
             {
