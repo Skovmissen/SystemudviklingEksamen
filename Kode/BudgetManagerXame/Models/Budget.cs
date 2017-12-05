@@ -12,6 +12,7 @@ namespace BudgetManagerXame.Models
         public int Year { get; set; }
         public string Description { get; set; }
         public string Fiscalid { get; set; }
+        public string FirmName { get; set; }
 
         public List<DataRow> BudgetList { get; set; }
     }

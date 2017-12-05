@@ -1,0 +1,50 @@
+﻿body {
+   
+}
+
+.Login-btn {
+    background-color: #9bae07; /* Green */
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    -webkit-transition-duration: 0.1s; /* Safari */
+    transition-duration: 0.1s;
+    cursor: pointer;
+    position: relative;
+}
+
+    .Login-btn:hover {
+        background-color: #8b9c06;
+        color: white;
+        text-decoration: none;
+
+    }
+.my_login_col {
+  text-align:center;
+}
+.navbar-brand {
+    font-size: 30px;
+    color:white;
+    font-family:Ebrima;
+    margin-left:-30px;
+    
+}
+.navbar-brand:hover {
+    font-size: 30px;
+    color: #f2f2f2;
+}
+
+
+.navbar-header{
+    margin-left:20%;
+   
+    
+}
+.nav {
+    background: #9bae07 url(/Content/toppattern2.png);
+
+}

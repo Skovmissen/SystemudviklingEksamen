@@ -26,11 +26,16 @@ namespace BudgetManagerXame.Controllers
             var FiscalId = jsonContent["Entities"][0];
             FiscalId = jsonContent["Entities"][0]["FiscalSetupId"];
 
+            var FirmName = jsonContent["Entities"][0];
+            FirmName = jsonContent["Entities"][0]["FiscalSetupName"];
+
             budget.Fiscalid = FiscalId.ToString();
-            ViewBag.ID = FiscalId;
+            budget.FirmName = FirmName.ToString() ;
+            ViewBag.Name = FirmName;
 
             DataTable dt = DB.GetAllBudgets(FiscalId.ToString());
             budget.BudgetList = dt.AsEnumerable().ToList();
+            
 
             return View(budget);
 
@@ -81,6 +86,7 @@ namespace BudgetManagerXame.Controllers
         {
             try
             {
+
                 budget.Year = int.Parse(Request.Form["Year"]);
                 budget.Description = Request.Form["Description"];
 

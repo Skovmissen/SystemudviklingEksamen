@@ -17,7 +17,7 @@ namespace BudgetManagerXame.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Log venligst ind inden du gør andet!";
+            
             return View();
         }
         [HttpPost]

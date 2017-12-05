@@ -5,8 +5,18 @@
 
 <div class="row">
 
-    <div class=" col-lg-3">
-        <h2>@ViewBag.Message</h2>
+    <div class=" col-lg-4">
+
     </div>
-    @Html.DisplayFor(model => model.Fis_ID)
+    <div class="my_login_col col-lg-4">
+        <h3>
+            Velkommen til <b>din</b> Budgetmanager! <br />
+            
+        </h3>
+        @Html.ActionLink("Login", "RunLogin", "Home", new { @class = "Login-btn" })
+    </div>
+    <div class=" col-lg-4">
+
+    </div>
+
 </div>
