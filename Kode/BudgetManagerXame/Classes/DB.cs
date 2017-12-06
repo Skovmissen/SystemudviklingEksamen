@@ -89,6 +89,7 @@ namespace BudgetManagerXame.Classes
             }
             catch (Exception ex)
             {
+                Console.WriteLine(id);
                 throw ex;
             }
         }

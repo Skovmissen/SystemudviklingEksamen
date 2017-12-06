@@ -48,8 +48,8 @@ namespace BudgetManagerXame.Controllers
                  periodId = item.PeriodId;
 
             }
-
-            return RedirectToAction("Create", "Estimate", new { budgetId = budgetId, periodId = periodId });
+            string fiscalId = DB.GetFiscalId(budgetId);
+            return RedirectToAction("BudgetList", "Budget", new { id = fiscalId });
 
 
         }
