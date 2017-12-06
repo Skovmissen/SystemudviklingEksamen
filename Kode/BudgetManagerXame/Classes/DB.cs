@@ -95,6 +95,26 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+        public static void CreateFinanceAccountsPeriod(int Accountid, int PeriodId, Budget budget) // Lavet af Lasse
+        {
+            OpenDb();
+            SqlCommand command = new SqlCommand("INSERT INTO FinanceAccountPeriod(AccountId, BudgetId, PeriodId, Estimate) VALUES (@AccountId, @BudgetId, @PeriodId, @Estimate)", connection);
+
+            command.Parameters.Add(CreateParam("@AccountId", Accountid, SqlDbType.Int));          
+            command.Parameters.Add(CreateParam("@BudgetId", budget.Id, SqlDbType.Int));
+            command.Parameters.Add(CreateParam("@PeriodId", PeriodId, SqlDbType.Int));
+            command.Parameters.Add(CreateParam("@Estimate", 0, SqlDbType.Int));
+            try
+            {
+
+                command.ExecuteNonQuery();
+                CloseDb();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public static void InsertDataInBudget(Budget budget, Period period, FinanceAccount account, FinanceAccountPeriod FAP) // Lavet af Lasse
         {
             OpenDb();
