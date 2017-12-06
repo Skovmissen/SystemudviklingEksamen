@@ -247,6 +247,33 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+        public static List<FinanceAccountPeriod> GetAllFinanceAccountsEstimates(int BudgetId, int PeriodeId) // Lavet af Lasse
+        {
+            OpenDb();
+            List<FinanceAccountPeriod> Accounts = new List<FinanceAccountPeriod>();
+            SqlCommand command = new SqlCommand("SELECT * From FinanceAccountPeriod WHERE BudgetId = @BudgetId AND PeriodId = @PeriodId", connection);
+            command.Parameters.AddWithValue("@BudgetId", BudgetId);
+            command.Parameters.AddWithValue("@PeriodId", PeriodeId);
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    FinanceAccountPeriod p = new FinanceAccountPeriod();
+                    p.AccountId = (int)reader["AccountId"];
+                    p.BudgetId = (int)reader["BudgetId"];
+                    p.PeriodId = (int)reader["PeriodId"];
+                    p.Estimate = (int)reader["Estimate"];
+                    Accounts.Add(p);
+                }
+                CloseDb();
+                return Accounts;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public static List<FinanceGroup> GetAllFinanceGroups() // Lavet af Lasse
         {
             OpenDb();

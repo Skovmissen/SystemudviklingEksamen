@@ -23,15 +23,12 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Estimate/Create
-        public ActionResult Create(int id)
+        public ActionResult Create(int budgetId, int periodId)
         {
             Estimate estimate = new Estimate();
 
-            estimate.Period = DB.GetAllPeriods();
-            estimate.FinanceAccount = DB.GetAllFinanceAccounts(id);
-            estimate.FinanceGroup = DB.GetAllFinanceGroups();
-
-
+            estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId, periodId);
+           
             return View(estimate);
         }
 
