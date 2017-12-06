@@ -220,6 +220,7 @@
     <Content Include="Views\Budget\Error.cshtml" />
     <Content Include="Views\Budget\Delete.cshtml" />
     <Content Include="Views\Estimate\Create.cshtml" />
+    <Content Include="Views\Budget\BudgetList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
