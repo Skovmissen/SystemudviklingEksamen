@@ -22,7 +22,7 @@ namespace BudgetManagerXame.Controllers
             var FiscalId = "";
             var FirmName = "";
             var content = await GetJsonString();
-            Dictionary<string, string> FirmList = new Dictionary<string, string>();
+            Dictionary<string, int> FirmList = new Dictionary<string, int>();
         JObject jsonContent = JObject.Parse(content);
 
             for (int i = 0; i < jsonContent.Count; i++)
@@ -32,7 +32,7 @@ namespace BudgetManagerXame.Controllers
 
                 FirmName = jsonContent["Entities"][i].ToString();
                 FirmName = jsonContent["Entities"][i]["FiscalSetupName"].ToString();
-                FirmList.Add(FirmName, FiscalId);
+                FirmList.Add(FirmName, i);
                 
             }
             budget.firmList = FirmList;
@@ -56,7 +56,7 @@ namespace BudgetManagerXame.Controllers
             var FiscalId = "";
             var FirmName = "";
             var content = await GetJsonString();
-
+            budget.firmId = id;
             JObject jsonContent = JObject.Parse(content);
 
            
@@ -107,7 +107,7 @@ namespace BudgetManagerXame.Controllers
 
         // POST: Budget/Create
         [HttpPost]
-        public async Task<ActionResult> Create(FormCollection collection, Budget budget)
+        public async Task<ActionResult> Create(FormCollection collection, Budget budget, int id)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace BudgetManagerXame.Controllers
 
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("BudgetList", "Budget", new { @id = id });
             }
             catch (Exception e)
             {

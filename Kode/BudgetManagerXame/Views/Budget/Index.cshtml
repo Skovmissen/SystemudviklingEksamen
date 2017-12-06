@@ -7,9 +7,10 @@
 <div class="row">
     @foreach (var item in Model.firmList)
     {
+        <div class="col-lg-3"></div>
         <div class="col-lg-3">
-            <p>@item.Key</p>
-            <p>@item.Value</p>
+            @Html.ActionLink(item.Key, "BudgetList", "Budget", new { id = item.Value }, new { @class = "Firm-btn" }) 
         </div>
+        <div class="col-lg-3"></div>
     }
 </div>

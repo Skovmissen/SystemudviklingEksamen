@@ -16,6 +16,7 @@ namespace BudgetManagerXame.Models
 
         public List<DataRow> BudgetList { get; set; }
    
-        public Dictionary<string,string> firmList { get; set; }
+        public Dictionary<string,int> firmList { get; set; }
+        public int firmId { get; set; }
     }
 }

@@ -27,7 +27,7 @@
         </tbody>
     </table>
 
-    @Html.ActionLink("Opret Nyt Budget", "Create", "Budget", new { fiscalId = Model.Fiscalid }, new { @class = "Login-btn" })
+    @Html.ActionLink("Opret Nyt Budget", "Create", "Budget", new { fiscalId = Model.Fiscalid, id = Model.firmId }, new { @class = "Login-btn" })
 </div>
 
 
