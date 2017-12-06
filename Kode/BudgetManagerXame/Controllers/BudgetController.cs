@@ -19,24 +19,23 @@ namespace BudgetManagerXame.Controllers
 
         public async Task<ActionResult> Index(Budget budget)
         {
+            var FiscalId = "";
+            var FirmName = "";
             var content = await GetJsonString();
+            Dictionary<string, string> FirmList = new Dictionary<string, string>();
+        JObject jsonContent = JObject.Parse(content);
 
-            JObject jsonContent = JObject.Parse(content);
+            for (int i = 0; i < jsonContent.Count; i++)
+            {
+                FiscalId = jsonContent["Entities"][i].ToString();
+                FiscalId = jsonContent["Entities"][i]["FiscalSetupId"].ToString();
 
-            var FiscalId = jsonContent["Entities"][0];
-            FiscalId = jsonContent["Entities"][0]["FiscalSetupId"];
-
-            var FirmName = jsonContent["Entities"][0];
-            FirmName = jsonContent["Entities"][0]["FiscalSetupName"];
-
-            budget.Fiscalid = FiscalId.ToString();
-            budget.FirmName = FirmName.ToString() ;
-            ViewBag.Name = FirmName;
-
-            DataTable dt = DB.GetAllBudgets(FiscalId.ToString());
-            budget.BudgetList = dt.AsEnumerable().ToList();
-            
-
+                FirmName = jsonContent["Entities"][i].ToString();
+                FirmName = jsonContent["Entities"][i]["FiscalSetupName"].ToString();
+                FirmList.Add(FirmName, FiscalId);
+                
+            }
+            budget.firmList = FirmList;
             return View(budget);
 
         }
@@ -52,7 +51,33 @@ namespace BudgetManagerXame.Controllers
             return content;
 
         }
+        public async Task<ActionResult> BudgetList(Budget budget, int id)
+        {
+            var FiscalId = "";
+            var FirmName = "";
+            var content = await GetJsonString();
 
+            JObject jsonContent = JObject.Parse(content);
+
+           
+                FiscalId = jsonContent["Entities"][id].ToString();
+                FiscalId = jsonContent["Entities"][id]["FiscalSetupId"].ToString();
+
+                FirmName = jsonContent["Entities"][id].ToString();
+                FirmName = jsonContent["Entities"][id]["FiscalSetupName"].ToString();
+                
+            
+
+            budget.Fiscalid = FiscalId.ToString();
+            budget.FirmName = FirmName.ToString();
+            ViewBag.Name = FirmName;
+
+            DataTable dt = DB.GetAllBudgets(FiscalId.ToString());
+            budget.BudgetList = dt.AsEnumerable().ToList();
+
+
+            return View(budget);
+        }
         // GET: Budget/Details/5
         public ActionResult Details(int id)
         {
@@ -63,8 +88,8 @@ namespace BudgetManagerXame.Controllers
         // GET: Budget/Create
         public ActionResult Create(Budget budget)
         {
-            
-          
+
+
             return View(budget);
         }
         public async Task<string> GetFinanceAccounts()
@@ -121,9 +146,9 @@ namespace BudgetManagerXame.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                
+
                 return RedirectToAction("Error", e);
             }
         }
@@ -141,11 +166,11 @@ namespace BudgetManagerXame.Controllers
             estimate.Period = DB.GetAllPeriods();
             estimate.FinanceAccount = DB.GetAllFinanceAccounts(id);
             estimate.FinanceGroup = DB.GetAllFinanceGroups();
-            
-            
+
+
             return View(estimate);
         }
-            
+
         // POST: Budget/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
