@@ -109,6 +109,8 @@ namespace BudgetManagerXame.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(FormCollection collection, Budget budget)
         {
+            Estimate estimate = new Estimate();
+            estimate.Period = DB.GetAllPeriods();
             try
             {
 
@@ -140,9 +142,16 @@ namespace BudgetManagerXame.Controllers
                     {
                         DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
                     }
-
-
                 }
+                estimate.FinanceAccount = DB.GetAllFinanceAccounts(budget.Id);
+                foreach (var period in estimate.Period)
+                {
+                    foreach (var financeAccount in estimate.FinanceAccount)
+                    {
+                        DB.CreateFinanceAccountsPeriod(financeAccount.AccountId, period.Id, budget);
+                    }
+                }
+
 
                 return RedirectToAction("Index");
             }
