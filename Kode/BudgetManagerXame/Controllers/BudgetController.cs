@@ -92,14 +92,14 @@ namespace BudgetManagerXame.Controllers
 
             return View(budget);
         }
-        public async Task<string> GetFinanceAccounts()
+        public async Task<string> GetFinanceAccounts(Budget budget)
         {
             string token = Request.Cookies["access_token"].Value;
 
             HttpClient _client = new HttpClient();
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string content = await _client.GetStringAsync("https://my.xena.biz/Api/Fiscal/98512/LedgerSearch/FullList?ForceNoPaging=true&Page=0&PageSize=10&ShowDeactivated=false&_=1512459901335");
+            string content = await _client.GetStringAsync("https://my.xena.biz/Api/Fiscal/" + budget.Fiscalid + "/LedgerSearch/FullList?ForceNoPaging=true&Page=0&PageSize=10&ShowDeactivated=false&_=1512459901335");
 
             return content;
 
@@ -122,7 +122,7 @@ namespace BudgetManagerXame.Controllers
                 var FinanceAccountId = "";
                 var LedgerAccoount = "";
                 var FinanceAccountDesc = "";
-                var content = await GetFinanceAccounts();
+                var content = await GetFinanceAccounts(budget);
 
                 JObject jsonContent = JObject.Parse(content);
                 int items = jsonContent["Entities"].Count();

@@ -23,29 +23,35 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Estimate/Create
-        public ActionResult Create(int budgetId, int periodId)
+        public ActionResult Create(Estimate estimate ,int budgetId , int periodId)
         {
-            Estimate estimate = new Estimate();
-
+          
             estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId, periodId);
-           
+            estimate.Period = DB.GetAllPeriods();
+            estimate.FinanceGroup = DB.GetAllFinanceGroups();
+            estimate.FinanceAccount = DB.GetAllFinanceAccounts(budgetId);
+            //estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId, periodId);
+            ViewBag.PeriodId = estimate.Period[periodId -1].Name;
             return View(estimate);
         }
 
         // POST: Estimate/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [HttpPost, ActionName("Create")]
+        public ActionResult UpdateBudget(Estimate estimate)
         {
-            try
+            int budgetId = 0;
+            int periodId = 0;
+            foreach (var item in estimate.Fap)
             {
-                // TODO: Add insert logic here
+                DB.UpdateFinanceAccountsPeriod(item.AccountId, item.PeriodId, item.BudgetId, item.Estimate);
+                 budgetId = item.BudgetId;
+                 periodId = item.PeriodId;
 
-                return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            return RedirectToAction("Create", "Estimate", new { budgetId = budgetId, periodId = periodId });
+
+
         }
 
         // GET: Estimate/Edit/5

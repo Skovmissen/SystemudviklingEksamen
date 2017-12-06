@@ -46,10 +46,10 @@ namespace BudgetManagerXame.Classes
             command.Parameters.Add(CreateParam("@Year", budget.Year, SqlDbType.Int));
             command.Parameters.Add(CreateParam("@Description", budget.Description, SqlDbType.NVarChar));
             command.Parameters.Add(CreateParam("@FiscalId", budget.Fiscalid, SqlDbType.Int));
-             
+
             try
             {
-                id = command.ExecuteScalar(); 
+                id = command.ExecuteScalar();
                 CloseDb();
             }
             catch (Exception ex)
@@ -69,6 +69,23 @@ namespace BudgetManagerXame.Classes
                 OpenDb();
                 budget.Id = int.Parse(command.ExecuteScalar().ToString());
                 CloseDb();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static string GetFiscalId(int id) // Lavet af Lasse
+        {
+            OpenDb();
+            SqlCommand command = new SqlCommand("SELECT FiscalId From Budget WHERE Id = @id ", connection);
+            command.Parameters.AddWithValue("@id", id);
+            try
+            {
+
+                string fiscal = command.ExecuteScalar().ToString();
+                CloseDb();
+                return fiscal;
             }
             catch (Exception ex)
             {
@@ -100,10 +117,30 @@ namespace BudgetManagerXame.Classes
             OpenDb();
             SqlCommand command = new SqlCommand("INSERT INTO FinanceAccountPeriod(AccountId, BudgetId, PeriodId, Estimate) VALUES (@AccountId, @BudgetId, @PeriodId, @Estimate)", connection);
 
-            command.Parameters.Add(CreateParam("@AccountId", Accountid, SqlDbType.Int));          
+            command.Parameters.Add(CreateParam("@AccountId", Accountid, SqlDbType.Int));
             command.Parameters.Add(CreateParam("@BudgetId", budget.Id, SqlDbType.Int));
             command.Parameters.Add(CreateParam("@PeriodId", PeriodId, SqlDbType.Int));
-            command.Parameters.Add(CreateParam("@Estimate", 0, SqlDbType.Int));
+            command.Parameters.Add(CreateParam("@Estimate", 0, SqlDbType.Float));
+            try
+            {
+
+                command.ExecuteNonQuery();
+                CloseDb();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static void UpdateFinanceAccountsPeriod(int Accountid, int PeriodId, int budgetId, double estimate) // Lavet af Lasse
+        {
+            OpenDb();
+            SqlCommand command = new SqlCommand("UPDATE FinanceAccountPeriod SET Estimate = @Estimate WHERE BudgetId = @BudgetId AND AccountId = @AccountId AND PeriodId = @PeriodId", connection);
+
+            command.Parameters.Add(CreateParam("@AccountId", Accountid, SqlDbType.Int));
+            command.Parameters.Add(CreateParam("@BudgetId", budgetId, SqlDbType.Int));
+            command.Parameters.Add(CreateParam("@PeriodId", PeriodId, SqlDbType.Int));
+            command.Parameters.Add(CreateParam("@Estimate", estimate, SqlDbType.Float));
             try
             {
 
@@ -208,7 +245,7 @@ namespace BudgetManagerXame.Classes
                 while (reader.Read())
                 {
                     Period p = new Period();
-                    p.Id = (int) reader["Id"];
+                    p.Id = (int)reader["Id"];
                     p.Name = (string)reader["Name"];
                     Periods.Add(p);
                 }
@@ -260,10 +297,10 @@ namespace BudgetManagerXame.Classes
                 while (reader.Read())
                 {
                     FinanceAccountPeriod p = new FinanceAccountPeriod();
-                    p.AccountId = (int)reader["AccountId"];
-                    p.BudgetId = (int)reader["BudgetId"];
-                    p.PeriodId = (int)reader["PeriodId"];
-                    p.Estimate = (int)reader["Estimate"];
+                    p.AccountId = Convert.ToInt32(reader["AccountId"]);
+                    p.BudgetId = Convert.ToInt32(reader["BudgetId"]);
+                    p.PeriodId = Convert.ToInt32(reader["PeriodId"]);
+                    p.Estimate = Convert.ToInt32(reader["Estimate"]);
                     Accounts.Add(p);
                 }
                 CloseDb();
@@ -306,7 +343,7 @@ namespace BudgetManagerXame.Classes
             SqlDataAdapter command = new SqlDataAdapter("SELECT Name FROM FinanceGroup WHERE LedgerAccount = @LedgerAccount", connection);
 
             command.SelectCommand.Parameters.AddWithValue("@LedgerAccount", LedgerAccount);
- 
+
             try
             {
                 command.Fill(dt);
@@ -321,8 +358,8 @@ namespace BudgetManagerXame.Classes
                 {
                     name = "";
                 }
-               
-                
+
+
                 CloseDb();
             }
             catch (Exception ex)

@@ -21,7 +21,7 @@
                     <td>@Html.ActionLink(item["Year"].ToString(), "Details", new { id = item["Id"] })</td>
                     <td>@item["Description"]</td>
                     <td></td>
-                    <td class="text-right">@Html.ActionLink("Inddatere", "Create", "Estimate", new { id = item["Id"] }, null) | @Html.ActionLink("Oversigt", "Details", new { id = item["Id"] }) | @Html.ActionLink("Redigere", "Edit", new { id = item["Id"] }) | @Html.ActionLink("Slet", "Delete", new { id = item["Id"] })  </td>
+                    <td class="text-right">@Html.ActionLink("Inddatere", "Create", "Estimate", new { budgetId = item["Id"], periodId = 1 }, null) | @Html.ActionLink("Oversigt", "Details", new { id = item["Id"] }) | @Html.ActionLink("Redigere", "Edit", new { id = item["Id"] }) | @Html.ActionLink("Slet", "Delete", new { id = item["Id"] })  </td>
                 </tr>
             }
         </tbody>
