@@ -102,10 +102,13 @@ namespace BudgetManagerXame.Controllers
         {
             estimate.Period = DB.GetAllPeriods();
             estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId);
-
-
             estimate.FinanceGroup = DB.GetAllFinanceGroups();
             estimate.FinanceAccount = DB.GetAllFinanceAccounts(budgetId);
+            for (int i = 0; i < estimate.FinanceAccount.Count; i++)
+            {
+                int total = DB.GetTotalForGroup(estimate.FinanceAccount[i].AccountId, estimate.Period[i].Id, budgetId);
+                estimate.TotalDic.Add(estimate.FinanceGroup[i].Name, total);
+            }
             ViewBag.Year = DB.GetBudgetYear(budgetId);
             return View(estimate);
         }
