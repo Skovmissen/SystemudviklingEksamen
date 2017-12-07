@@ -93,12 +93,11 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static int GetTotalForGroup(int accountId, int PeriodId, int BudgetId) // Lavet af Lasse
+        public static int GetTotalForGroup(int accountId, int BudgetId) // Lavet af Lasse
         {
             OpenDb();
-            SqlCommand command = new SqlCommand("SELECT Estimate From FinanceAccountPeriod WHERE AccountId = @accountId AND PeriodId = @PeriodId AND BudgetId = @BudgetId", connection);
+            SqlCommand command = new SqlCommand("SELECT Estimate From FinanceAccountPeriod WHERE AccountId = @accountId AND BudgetId = @BudgetId", connection);
             command.Parameters.AddWithValue("@accountId", accountId);
-            command.Parameters.AddWithValue("@PeriodId", PeriodId);
             command.Parameters.AddWithValue("@BudgetId", BudgetId);
             try
             {

@@ -23,15 +23,15 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Estimate/Create
-        public ActionResult Create(Estimate estimate ,int budgetId , int periodId)
+        public ActionResult Create(Estimate estimate, int budgetId, int periodId)
         {
-          
+
             estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId, periodId);
             estimate.Period = DB.GetAllPeriods();
             estimate.FinanceGroup = DB.GetAllFinanceGroups();
             estimate.FinanceAccount = DB.GetAllFinanceAccounts(budgetId);
             //estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId, periodId);
-            ViewBag.PeriodId = estimate.Period[periodId -1].Name;
+            ViewBag.PeriodId = estimate.Period[periodId - 1].Name;
             return View(estimate);
         }
 
@@ -44,8 +44,8 @@ namespace BudgetManagerXame.Controllers
             foreach (var item in estimate.Fap)
             {
                 DB.UpdateFinanceAccountsPeriod(item.AccountId, item.PeriodId, item.BudgetId, item.Estimate);
-                 budgetId = item.BudgetId;
-                 periodId = item.PeriodId;
+                budgetId = item.BudgetId;
+                periodId = item.PeriodId;
 
             }
             string fiscalId = DB.GetFiscalId(budgetId);
@@ -100,27 +100,25 @@ namespace BudgetManagerXame.Controllers
         [HttpGet]
         public ActionResult Show(Estimate estimate, int budgetId)
         {
+            int total = 0;
             estimate.Period = DB.GetAllPeriods();
             estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId);
             estimate.FinanceGroup = DB.GetAllFinanceGroups();
             estimate.FinanceAccount = DB.GetAllFinanceAccounts(budgetId);
-            for (int i = 0; i < estimate.Period.Count; i++)
+
+            for (int i = 0; i < estimate.FinanceGroup.Count; i++)
             {
-                for (int j = 0; j < DB.GetAllFinanceAccountsEstimates(budgetId).Count; j++)
-                {
-                    int total = DB.GetTotalForGroup(estimate.FinanceAccount[i].AccountId, estimate.Period[j].Id, budgetId);
-                    estimate.TotalDic.Add(estimate.FinanceGroup[i].Name, total);
-                }
-                
-               
+                estimate.Fap[i].GroupName = estimate.FinanceGroup[i].Name;
             }
+
+
             ViewBag.Year = DB.GetBudgetYear(budgetId);
             return View(estimate);
         }
         [HttpPost]
         public ActionResult Show()
         {
-           
+
             return View();
         }
     }
