@@ -23,7 +23,7 @@ namespace BudgetManagerXame.Controllers
             var FirmName = "";
             var content = await GetJsonString();
             Dictionary<string, int> FirmList = new Dictionary<string, int>();
-        JObject jsonContent = JObject.Parse(content);
+            JObject jsonContent = JObject.Parse(content);
 
             for (int i = 0; i < jsonContent.Count; i++)
             {
@@ -32,8 +32,8 @@ namespace BudgetManagerXame.Controllers
 
                 FirmName = jsonContent["Entities"][i].ToString();
                 FirmName = jsonContent["Entities"][i]["FiscalSetupName"].ToString();
-                FirmList.Add(FirmName, i);
-                
+                FirmList.Add(FirmName, Convert.ToInt32(FiscalId));
+
             }
             budget.firmList = FirmList;
             return View(budget);
@@ -51,22 +51,33 @@ namespace BudgetManagerXame.Controllers
             return content;
 
         }
-        public async Task<ActionResult> BudgetList(Budget budget, int id)
+        public async Task<ActionResult> BudgetList(Budget budget, string id)
         {
             var FiscalId = "";
             var FirmName = "";
             var content = await GetJsonString();
-            budget.firmId = id;
+            budget.firmId = Convert.ToInt32(id);
             JObject jsonContent = JObject.Parse(content);
 
-           
-                FiscalId = jsonContent["Entities"][id].ToString();
-                FiscalId = jsonContent["Entities"][id]["FiscalSetupId"].ToString();
+            for (int i = 0; i < jsonContent.Count; i++)
+            {
+                //FiscalId = jsonContent["Entities"][i].ToString();
 
-                FirmName = jsonContent["Entities"][id].ToString();
-                FirmName = jsonContent["Entities"][id]["FiscalSetupName"].ToString();
-                
-            
+                if (jsonContent["Entities"][i]["FiscalSetupId"].ToString() == id)
+                {
+                    FiscalId = jsonContent["Entities"][i]["FiscalSetupId"].ToString();
+                    //FirmName = jsonContent["Entities"][i].ToString();
+                    FirmName = jsonContent["Entities"][i]["FiscalSetupName"].ToString();
+                }
+                else
+                {
+
+                }
+            }
+
+
+
+
 
             budget.Fiscalid = FiscalId.ToString();
             budget.FirmName = FirmName.ToString();
@@ -197,7 +208,7 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Budget/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
             Budget budget = DB.GetBudget(id);
             return View(budget);
@@ -205,10 +216,13 @@ namespace BudgetManagerXame.Controllers
 
         // POST: Budget/Delete/5
         [HttpPost]
-        public ActionResult DeleteConfirm(int? id)
+        public ActionResult DeleteConfirm(int id)
         {
+            string fiscalId = DB.GetFiscalId(id);
             DB.DeleteBudget(id);
-            return View("Index");
+            
+
+            return RedirectToAction("BudgetList", "Budget", new { id = fiscalId });
         }
     }
 }
