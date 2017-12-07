@@ -18,10 +18,14 @@
     {
         <tr>
             <td><b>@group.Name</b></td>
-            @foreach (var item in Model.TotalDic.Where(x => x.Key == group.Name))
+            @foreach (var periode in Model.Period)
             {
-                <td>@item.Value</td>
+                @foreach (var item in Model.Fap.Where(x => x.PeriodId == periode.Id && x.GroupName == group.Name))
+                {
+                    <td>@item.Estimate</td>
+                }
             }
+            
 
         </tr>
         foreach (var account in Model.FinanceAccount)
