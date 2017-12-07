@@ -1,0 +1,107 @@
+﻿@model BudgetManagerXame.Models.Estimate
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<table class="table table-bordered">
+    <tr>
+        <th>
+
+        </th>
+        @foreach (var period in Model.Period)
+        {
+            <th class="col-lg-2">@period.Name</th>
+        }
+    </tr>
+    @foreach (var group in Model.FinanceGroup)
+    {
+        <tr>
+            <td><b>@group.Name</b></td>
+        </tr>
+        foreach (var account in Model.FinanceAccount)
+        {
+            if (account.FinanceGroup == group.Name)
+            {
+                <tr>
+                    <td>
+                        @account.Name
+                </td>
+                    
+                        @foreach (var estimate in Model.Fap)
+                        {
+                            if (estimate.AccountId == account.AccountId)
+                            {
+                                <td class="text-right">@estimate.Estimate</td>
+                            }
+
+                        }
+
+                    
+            </tr>
+            }
+
+        }
+    }
+</table>
+@*<div>
+
+
+    <table class="table-striped">
+        <tr>
+            <th>
+                Grupper
+            </th>
+        </tr>
+        @foreach (var item in Model.FinanceGroup)
+        {
+            <tr>
+                <td>
+                    <b>@item.Name</b>
+
+                </td>
+
+            </tr>
+
+            foreach (var account in Model.FinanceAccount)
+            {
+                <tr>
+                    @if (account.FinanceGroup == item.Name)
+                    {
+                        <td>
+                            @account.Name
+                        </td>
+                    }
+                </tr>
+            }
+
+        }
+    </table>
+    @foreach (var item in Model.Period)
+    {
+        <table class="table-striped">
+            <tr>
+                <th>
+                    @item.Name
+                </th>
+            </tr>
+
+            @foreach (var estimate in Model.Fap.Where(x => x.PeriodId == item.Id))
+            {
+                <tr>
+                    <td>
+                        @estimate.Estimate
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+</div>*@
+
+<script>
+    function SelectionChanged(val) {
+        id = document.getElementById("budgetId").value;
+        window.location.href = "/Estimate/Create?budgetId=" + id + "&periodId=" + val;
+    }
+</script>

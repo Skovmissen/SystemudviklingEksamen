@@ -312,6 +312,59 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+        public static List<FinanceAccountPeriod> GetAllFinanceAccountsEstimates(int BudgetId) // Lavet af Lasse
+        {
+            OpenDb();
+            List<FinanceAccountPeriod> Accounts = new List<FinanceAccountPeriod>();
+            SqlCommand command = new SqlCommand("SELECT * From FinanceAccountPeriod WHERE BudgetId = @BudgetId", connection);
+            command.Parameters.AddWithValue("@BudgetId", BudgetId);
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    FinanceAccountPeriod p = new FinanceAccountPeriod();
+                    p.AccountId = Convert.ToInt32(reader["AccountId"]);
+                    p.BudgetId = Convert.ToInt32(reader["BudgetId"]);
+                    p.PeriodId = Convert.ToInt32(reader["PeriodId"]);
+                    p.Estimate = Convert.ToInt32(reader["Estimate"]);
+                    Accounts.Add(p);
+                }
+                CloseDb();
+                return Accounts;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static List<FinanceAccountPeriod> GetAllFinanceAccountsEstimateForAccount(int BudgetId, int period) // Lavet af Lasse
+        {
+            OpenDb();
+            List<FinanceAccountPeriod> Accounts = new List<FinanceAccountPeriod>();
+            SqlCommand command = new SqlCommand("SELECT * From FinanceAccountPeriod WHERE BudgetId = @BudgetId AND PeriodId = @Period", connection);
+            command.Parameters.AddWithValue("@BudgetId", BudgetId);
+            command.Parameters.AddWithValue("@Period", period);
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    FinanceAccountPeriod p = new FinanceAccountPeriod();
+                    p.AccountId = Convert.ToInt32(reader["AccountId"]);
+                    p.BudgetId = Convert.ToInt32(reader["BudgetId"]);
+                    p.PeriodId = Convert.ToInt32(reader["PeriodId"]);
+                    p.Estimate = Convert.ToInt32(reader["Estimate"]);
+                    Accounts.Add(p);
+                }
+                CloseDb();
+                return Accounts;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public static List<FinanceGroup> GetAllFinanceGroups() // Lavet af Lasse
         {
             OpenDb();

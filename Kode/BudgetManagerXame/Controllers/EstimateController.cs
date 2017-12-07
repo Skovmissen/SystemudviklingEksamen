@@ -55,7 +55,7 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Estimate/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit()
         {
             return View();
         }
@@ -96,6 +96,25 @@ namespace BudgetManagerXame.Controllers
             {
                 return View();
             }
+        }
+        [HttpGet]
+        public ActionResult Show(Estimate estimate, int budgetId)
+        {
+            estimate.Period = DB.GetAllPeriods();
+            estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId);
+
+
+            estimate.FinanceGroup = DB.GetAllFinanceGroups();
+            estimate.FinanceAccount = DB.GetAllFinanceAccounts(budgetId);
+            //estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId, periodId);
+            //ViewBag.PeriodId = estimate.Period[periodId - 1].Name;
+            return View(estimate);
+        }
+        [HttpPost]
+        public ActionResult Show()
+        {
+           
+            return View();
         }
     }
 }
