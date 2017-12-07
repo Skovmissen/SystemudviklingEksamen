@@ -3,40 +3,59 @@
 @{
     ViewBag.Title = "Create";
 }
+@{
 
-<table class="table table-bordered">
-    <tr>
-        <th>
-            Budget år: @ViewBag.Year
-        </th>
-        @foreach (var period in Model.Period)
-        {
-            <th class="col-lg-2">@period.Name</th>
-        }
-    </tr>
-    @foreach (var group in Model.FinanceGroup)
-    {
+
+    <table class="table table-bordered">
         <tr>
-            <td><b>@group.Name</b></td>
-            @foreach (var periode in Model.Period)
+            <th>
+                Budget år: @ViewBag.Year
+            </th>
+            @foreach (var period in Model.Period)
             {
-                @foreach (var item in Model.Fap.Where(x => x.PeriodId == periode.Id && x.GroupName == group.Name))
-                {
-                    <td>@item.Estimate</td>
-                }
+                <th class="col-lg-2">@period.Name</th>
             }
-            
-
         </tr>
-        foreach (var account in Model.FinanceAccount)
+        @foreach (var group in Model.FinanceGroup)
         {
-            if (account.FinanceGroup == group.Name)
+            double total = 0;
+            <tr>
+                <td><b>@group.Name</b></td>
+                @foreach (var per in Model.Period)
+                {
+                    foreach (var account in Model.FinanceAccount)
+                    {
+                        if (account.FinanceGroup == group.Name)
+                        {
+                            foreach (var estimate in Model.Fap)
+                            {
+                                if (estimate.AccountId == account.AccountId && estimate.PeriodId == per.Id)
+                                {
+                                    total += estimate.Estimate;
+                                }
+
+                            }
+
+
+                        }
+
+
+                    }
+                    <td class="text-right"><b>@total</b></td>
+                    total = 0;
+                }
+
+
+            </tr>
+            foreach (var account in Model.FinanceAccount)
             {
-                <tr>
-                    <td>
-                        @account.Name
-                </td>
-                    
+                if (account.FinanceGroup == group.Name)
+                {
+                    <tr>
+                        <td>
+                            @account.Name
+                        </td>
+
                         @foreach (var estimate in Model.Fap)
                         {
                             if (estimate.AccountId == account.AccountId)
@@ -45,10 +64,11 @@
                             }
 
                         }
-     
-            </tr>
-            }
 
+                    </tr>
+                }
+
+            }
         }
-    }
-</table>
+    </table>
+}
