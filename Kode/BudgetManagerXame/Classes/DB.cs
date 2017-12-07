@@ -113,6 +113,25 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+
+        public static int GetBudgetYear(int budgetId)
+        {
+            OpenDb();
+            SqlCommand command = new SqlCommand("SELECT Year From Budget WHERE Id = @budgetId ", connection);
+            command.Parameters.AddWithValue("@budgetId", budgetId);
+            try
+            {
+
+                int year = int.Parse(command.ExecuteScalar().ToString());
+                CloseDb();
+                return year;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static void CreateFinanceAccountsPeriod(int Accountid, int PeriodId, Budget budget) // Lavet af Lasse
         {
             OpenDb();

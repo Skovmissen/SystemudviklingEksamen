@@ -7,7 +7,7 @@
 <table class="table table-bordered">
     <tr>
         <th>
-
+            Budget år: @ViewBag.Year
         </th>
         @foreach (var period in Model.Period)
         {
@@ -36,72 +36,10 @@
                             }
 
                         }
-
-                    
+     
             </tr>
             }
 
         }
     }
 </table>
-@*<div>
-
-
-    <table class="table-striped">
-        <tr>
-            <th>
-                Grupper
-            </th>
-        </tr>
-        @foreach (var item in Model.FinanceGroup)
-        {
-            <tr>
-                <td>
-                    <b>@item.Name</b>
-
-                </td>
-
-            </tr>
-
-            foreach (var account in Model.FinanceAccount)
-            {
-                <tr>
-                    @if (account.FinanceGroup == item.Name)
-                    {
-                        <td>
-                            @account.Name
-                        </td>
-                    }
-                </tr>
-            }
-
-        }
-    </table>
-    @foreach (var item in Model.Period)
-    {
-        <table class="table-striped">
-            <tr>
-                <th>
-                    @item.Name
-                </th>
-            </tr>
-
-            @foreach (var estimate in Model.Fap.Where(x => x.PeriodId == item.Id))
-            {
-                <tr>
-                    <td>
-                        @estimate.Estimate
-                    </td>
-                </tr>
-            }
-
-        </table>
-    }
-</div>*@
-
-<script>
-    function SelectionChanged(val) {
-        id = document.getElementById("budgetId").value;
-        window.location.href = "/Estimate/Create?budgetId=" + id + "&periodId=" + val;
-    }
-</script>
