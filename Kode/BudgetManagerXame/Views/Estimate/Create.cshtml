@@ -7,14 +7,15 @@
 
 @using (Html.BeginForm())
 {
-    @Html.DropDownListFor(m => m.Period, new SelectList(Model.Period, "Id", "Name"),"Vælg måned", new { @class = "dropdown",  @onchange = "SelectionChanged(this.value)" })
+    <div class="Dropdown_Month">@Html.DropDownListFor(m => m.Period, new SelectList(Model.Period, "Id", "Name"), "Vælg måned", new { @class = "dropdown", @onchange = "SelectionChanged(this.value)" })</div>
+
     <table class="table-striped">
         <tr>
             <th>
 
             </th>
             <th>
-               @ViewBag.PeriodId
+                @ViewBag.PeriodId
             </th>
         </tr>
         @for (int j = 0; j < Model.FinanceGroup.Count; j++)
@@ -39,10 +40,10 @@
                             @Html.HiddenFor(m => m.Fap[i].BudgetId)
                             @Html.HiddenFor(m => m.Fap[i].PeriodId)
                             @Html.HiddenFor(m => m.Fap[i].AccountId)
-                            
+
                         </td>
                         <td>
-                                <input type="hidden" id="budgetId" value="@Model.Fap[i].BudgetId" />
+                            <input type="hidden" id="budgetId" value="@Model.Fap[i].BudgetId" />
                         </td>
                     }
 
