@@ -68,10 +68,25 @@
         color: white;
         text-decoration: none;
     }
-.Dropdown_Month {
-    margin-left: 100px;
 
+.Dropdown_Month {
+    margin-top: 30px;
 }
+
 .dropdown {
-    width: 100px;
+    margin-left: 15px;
+    width: 250px;
+    height: 30px;
 }
+
+.my-btn {
+    background-color: #9bae07;
+    color: white;
+    text-decoration: none;
+}
+
+    .my-btn:hover {
+        background-color: #8b9c06;
+        color: white;
+        text-decoration: none;
+    }
