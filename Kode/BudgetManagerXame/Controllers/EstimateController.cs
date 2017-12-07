@@ -100,18 +100,11 @@ namespace BudgetManagerXame.Controllers
         [HttpGet]
         public ActionResult Show(Estimate estimate, int budgetId)
         {
-            int total = 0;
+            
             estimate.Period = DB.GetAllPeriods();
             estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId);
             estimate.FinanceGroup = DB.GetAllFinanceGroups();
             estimate.FinanceAccount = DB.GetAllFinanceAccounts(budgetId);
-
-            for (int i = 0; i < estimate.FinanceGroup.Count; i++)
-            {
-                estimate.Fap[i].GroupName = estimate.FinanceGroup[i].Name;
-            }
-
-
             ViewBag.Year = DB.GetBudgetYear(budgetId);
             return View(estimate);
         }

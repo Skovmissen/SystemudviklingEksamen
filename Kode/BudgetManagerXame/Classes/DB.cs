@@ -59,22 +59,6 @@ namespace BudgetManagerXame.Classes
             return Convert.ToInt32(id);
         }
 
-        public static void GetBudgetID(Budget budget) // Lavet af Lasse
-        {
-
-            SqlCommand command = new SqlCommand("SELECT Id From Budget WHERE FiscalID = @FiscalId ", connection);
-            command.Parameters.AddWithValue("@FiscalId", budget.Fiscalid);
-            try
-            {
-                OpenDb();
-                budget.Id = int.Parse(command.ExecuteScalar().ToString());
-                CloseDb();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         public static string GetFiscalId(int id) // Lavet af Lasse
         {
             OpenDb();
@@ -93,24 +77,7 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static int GetTotalForGroup(int accountId, int BudgetId) // Lavet af Lasse
-        {
-            OpenDb();
-            SqlCommand command = new SqlCommand("SELECT Estimate From FinanceAccountPeriod WHERE AccountId = @accountId AND BudgetId = @BudgetId", connection);
-            command.Parameters.AddWithValue("@accountId", accountId);
-            command.Parameters.AddWithValue("@BudgetId", BudgetId);
-            try
-            {
 
-                int total = Convert.ToInt16(command.ExecuteScalar().ToString());
-                CloseDb();
-                return total;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         public static void CreateFinanceAccounts(int id, string name, string ledgerAccount, Budget budget) // Lavet af Lasse
         {
             OpenDb();
@@ -190,26 +157,7 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static void InsertDataInBudget(Budget budget, Period period, FinanceAccount account, FinanceAccountPeriod FAP) // Lavet af Lasse
-        {
-            OpenDb();
-            SqlCommand command = new SqlCommand("INSERT INTO FinanceAccountPeriod (AccountId, BudgetId, PeriodId, Estimate) VALUES (@AccountId, @BudgetId, @PeriodId, @Estimate)", connection);
 
-            command.Parameters.Add(CreateParam("@AccountId", account.AccountId, SqlDbType.Int));
-            command.Parameters.Add(CreateParam("@PeriodId", period.Id, SqlDbType.NVarChar));
-            command.Parameters.Add(CreateParam("@Estimate", FAP.Estimate, SqlDbType.NVarChar));
-            command.Parameters.Add(CreateParam("@BudgetId", budget.Id, SqlDbType.Int));
-            try
-            {
-
-                command.ExecuteNonQuery();
-                CloseDb();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         public static void DeleteBudget(int? id)
         {
             OpenDb();
@@ -375,33 +323,7 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static List<FinanceAccountPeriod> GetAllFinanceAccountsEstimateForAccount(int BudgetId, int period) // Lavet af Lasse
-        {
-            OpenDb();
-            List<FinanceAccountPeriod> Accounts = new List<FinanceAccountPeriod>();
-            SqlCommand command = new SqlCommand("SELECT * From FinanceAccountPeriod WHERE BudgetId = @BudgetId AND PeriodId = @Period", connection);
-            command.Parameters.AddWithValue("@BudgetId", BudgetId);
-            command.Parameters.AddWithValue("@Period", period);
-            try
-            {
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    FinanceAccountPeriod p = new FinanceAccountPeriod();
-                    p.AccountId = Convert.ToInt32(reader["AccountId"]);
-                    p.BudgetId = Convert.ToInt32(reader["BudgetId"]);
-                    p.PeriodId = Convert.ToInt32(reader["PeriodId"]);
-                    p.Estimate = Convert.ToInt32(reader["Estimate"]);
-                    Accounts.Add(p);
-                }
-                CloseDb();
-                return Accounts;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+
         public static List<FinanceGroup> GetAllFinanceGroups() // Lavet af Lasse
         {
             OpenDb();
