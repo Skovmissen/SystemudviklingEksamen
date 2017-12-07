@@ -18,11 +18,11 @@
     {
         <tr>
             <td><b>@group.Name</b></td>
-            @foreach (var period in Model.TotalDic)
+            @foreach (var item in Model.TotalDic.Where(x => x.Key == group.Name))
             {
-                <td></td>
+                <td>@item.Value</td>
             }
-            
+
         </tr>
         foreach (var account in Model.FinanceAccount)
         {
