@@ -7,7 +7,10 @@
 
 @using (Html.BeginForm())
 {
-    <div class="Dropdown_Month">@Html.DropDownListFor(m => m.Period, new SelectList(Model.Period, "Id", "Name"), "Vælg måned", new { @class = "dropdown", @onchange = "SelectionChanged(this.value)" })</div>
+    <div class="Dropdown_Month">
+        <input type="submit" value="Gem" class="btn btn-default my-btn" />
+        @Html.DropDownListFor(m => m.Period, new SelectList(Model.Period, "Id", "Name"), "Vælg måned", new { @class = "dropdown", @onchange = "SelectionChanged(this.value)" })
+    </div>
 
     <table class="table-striped">
         <tr>
@@ -52,7 +55,8 @@
         }
 
     </table>
-    <input type="submit" value="Opret" class="btn btn-default" />
+    <input type="submit" value="Gem" class="btn btn-default my-btn" />
+    @Html.ActionLink("Tilbage", "Index", "Budget", null, null)
 }
 <script>
     function SelectionChanged(val) {
