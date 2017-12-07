@@ -11,5 +11,6 @@ namespace BudgetManagerXame.Models
         public int BudgetId { get; set; }
         public int PeriodId { get; set; }
         public double Estimate { get; set; }
+        public string GroupName { get; set; }
     }
 }
