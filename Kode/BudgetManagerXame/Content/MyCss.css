@@ -90,8 +90,9 @@
         color: white;
         text-decoration: none;
     }
-.head{
-    width:75px;
+.head {
+    width: 75px;
+    text-align: center;
 }
 .head-cat {
     width: 175px;
@@ -100,15 +101,25 @@
     margin-left: 50px;
     margin-right:50px;
 }
-.my-border-row
-{
-    border-bottom:solid 1px black;
-
+.my-border-row {
+    border-bottom: solid 2px #9bae07;
 }
 .my-border-div {
-    border-right: solid 1px black;
+    border-right: solid 1px #9bae07;
+    height: 30px;
+    margin-top: -8px;
+    padding-top: 8px;
 }
 .row{
     margin-left: -8px;
     margin-right: -8px;
 }
+.table-bordered{
+    margin-top:20px;
+}
+.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+    border: 2px solid #9bae07;
+}
+    .table-bordered > tr > .head {
+        text-align: center;
+    }
