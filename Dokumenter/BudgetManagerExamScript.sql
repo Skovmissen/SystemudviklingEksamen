@@ -12,8 +12,9 @@ CREATE TABLE Budget
 )
 
 CREATE TABLE FinanceGroup
-(
-	[Name] NVARCHAR(100) PRIMARY KEY
+(   [ID] INT,
+	[Name] NVARCHAR(100) PRIMARY KEY,
+	LedgerAccount NVARCHAR(100)
 )
 
 CREATE TABLE FinanceAccount
