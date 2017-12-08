@@ -75,10 +75,6 @@ namespace BudgetManagerXame.Controllers
                 }
             }
 
-
-
-
-
             budget.Fiscalid = FiscalId.ToString();
             budget.FirmName = FirmName.ToString();
             ViewBag.Name = FirmName;
@@ -130,39 +126,7 @@ namespace BudgetManagerXame.Controllers
 
                 budget.Id = DB.CreateBudget(budget);
 
-                var FinanceAccountId = "";
-                var LedgerAccoount = "";
-                var FinanceAccountDesc = "";
-                var content = await GetFinanceAccounts(budget);
-
-                JObject jsonContent = JObject.Parse(content);
-                int items = jsonContent["Entities"].Count();
-
-                for (int i = 0; i < items; i++)
-                {
-
-                    FinanceAccountId = jsonContent["Entities"][i]["AccountNumber"].ToString();
-                    FinanceAccountDesc = jsonContent["Entities"][i]["Description"].ToString();
-                    LedgerAccoount = jsonContent["Entities"][i]["LedgerAccount"].ToString();
-                    LedgerAccoount = DB.GetFinanceGroupName(LedgerAccoount);
-                    if (FinanceAccountId == "" || FinanceAccountDesc == "" || LedgerAccoount == "" || LedgerAccoount == "tom")
-                    {
-                        //ingen oprettelse uden _ID
-                    }
-                    else
-                    {
-                        DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
-                    }
-                }
-                estimate.FinanceAccount = DB.GetAllFinanceAccounts(budget.Id);
-                foreach (var period in estimate.Period)
-                {
-                    foreach (var financeAccount in estimate.FinanceAccount)
-                    {
-                        DB.CreateFinanceAccountsPeriod(financeAccount.AccountId, period.Id, budget);
-                    }
-                }
-
+                await AddAccountsToBudget(budget, estimate);
 
                 return RedirectToAction("BudgetList", "Budget", new { @id = id });
             }
@@ -172,11 +136,61 @@ namespace BudgetManagerXame.Controllers
                 return RedirectToAction("Error", e);
             }
         }
+        
+        public async Task<ActionResult> Sync(Budget budget, int id, string FiscalId)
+        {
+            Estimate estimate = new Estimate();
+            estimate.Period = DB.GetAllPeriods();
+            budget.Id = id;
+            budget.Fiscalid = FiscalId;
+            await AddAccountsToBudget(budget, estimate);
+
+            return RedirectToAction("Create", "Estimate", new { @budgetid = id, @periodId = 1 });
+        }
+
+        private async Task AddAccountsToBudget(Budget budget, Estimate estimate)
+        {
+
+            var FinanceAccountId = "";
+            var LedgerAccoount = "";
+            var FinanceAccountDesc = "";
+            var content = await GetFinanceAccounts(budget);
+
+            JObject jsonContent = JObject.Parse(content);
+            int items = jsonContent["Entities"].Count();
+
+            for (int i = 0; i < items; i++)
+            {
+
+                FinanceAccountId = jsonContent["Entities"][i]["AccountNumber"].ToString();
+                FinanceAccountDesc = jsonContent["Entities"][i]["Description"].ToString();
+                LedgerAccoount = jsonContent["Entities"][i]["LedgerAccount"].ToString();
+                LedgerAccoount = DB.GetFinanceGroupName(LedgerAccoount);
+                if (FinanceAccountId == "" || FinanceAccountDesc == "" || LedgerAccoount == "" || LedgerAccoount == "tom")
+                {
+                    //ingen oprettelse uden _ID
+                }
+                else
+                {
+                    DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
+                }
+            }
+            estimate.FinanceAccount = DB.GetAllFinanceAccounts(budget.Id);
+            foreach (var period in estimate.Period)
+            {
+                foreach (var financeAccount in estimate.FinanceAccount)
+                {
+                    DB.CreateFinanceAccountsPeriod(financeAccount.AccountId, period.Id, budget);
+                }
+            }
+        }
+
         public ActionResult Error(Exception e)
         {
             ViewBag.error = e;
             return View();
         }
+        
 
         // GET: Budget/Edit/5
         public ActionResult Edit(int id)
