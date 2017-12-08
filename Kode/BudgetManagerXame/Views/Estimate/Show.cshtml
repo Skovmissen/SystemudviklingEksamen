@@ -4,8 +4,6 @@
     ViewBag.Title = "Create";
 }
 @{
-
-
     <table class="table table-bordered">
         <tr>
             <th>
@@ -33,19 +31,12 @@
                                 {
                                     total += estimate.Estimate;
                                 }
-
                             }
-
-
                         }
-
-
                     }
                     <td class="text-right"><b>@total</b></td>
                     total = 0;
                 }
-
-
             </tr>
             foreach (var account in Model.FinanceAccount)
             {
@@ -62,12 +53,10 @@
                             {
                                 <td class="text-right">@estimate.Estimate</td>
                             }
-
                         }
 
                     </tr>
                 }
-
             }
         }
     </table>

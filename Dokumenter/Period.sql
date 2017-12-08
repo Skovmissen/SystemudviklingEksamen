@@ -1,17 +1,17 @@
 USE [BudgetManagerExam]
 GO
 
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Januar')
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Febuar')
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Marts')
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'April')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Jan')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Feb')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Mar')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Apr')
 INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Maj')
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Juni')
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Juli')
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'August')
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'September')
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Oktober')
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'November')
-INSERT INTO [dbo].[Period] ([Name]) VALUES (N'December')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Jun')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Jul')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Aug')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Sep')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Okt')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Nov')
+INSERT INTO [dbo].[Period] ([Name]) VALUES (N'Dec')
 
 
