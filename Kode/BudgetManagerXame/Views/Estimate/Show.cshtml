@@ -5,15 +5,15 @@
 }
 @{
 
-
+    @Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId, siteId = 2 }, new { @class = "btn btn-default my-btn" })
     <table class="table table-bordered">
         <tr>
-            <th>
+            <th class="head-cat">
                 Budget år: @ViewBag.Year
             </th>
             @foreach (var period in Model.Period)
             {
-                <th class="col-lg-2">@period.Name</th>
+                <th class="head">@period.Name</th>
             }
         </tr>
         @foreach (var group in Model.FinanceGroup)
@@ -40,7 +40,7 @@
 
 
                     }
-                    <td class="text-right"><b>@total</b></td>
+                    <td class="text-right"><div class="row my-border-row"><div class="col-lg-6 my-border-div"><b>@total</b></div><div class="col-lg-6"><b>Diff</b></div></div><div class="row"><div class="col-lg-12 text-center">%</div></div></td>
                     total = 0;
                 }
 
@@ -59,7 +59,7 @@
                         {
                             if (estimate.AccountId == account.AccountId)
                             {
-                                <td class="text-right">@estimate.Estimate</td>
+                                <td class="text-right"><div class="row my-border-row"><div class="col-lg-6 my-border-div">@estimate.Estimate</div><div class="col-lg-6">Diff</div> </div><div class="row"><div class="col-lg-12 text-center">%</div></div></td>
                             }
 
                         }

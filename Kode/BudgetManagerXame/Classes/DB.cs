@@ -329,7 +329,7 @@ namespace BudgetManagerXame.Classes
         {
             OpenDb();
             List<FinanceGroup> FinanceGroups = new List<FinanceGroup>();
-            SqlCommand command = new SqlCommand("SELECT * From FinanceGroup", connection);
+            SqlCommand command = new SqlCommand("SELECT * From FinanceGroup ORDER BY [ID]", connection);
             try
             {
                 SqlDataReader reader = command.ExecuteReader();

@@ -10,7 +10,7 @@
     <div class="Dropdown_Month">
         <input type="submit" value="Gem" class="btn btn-default my-btn" />
         @Html.DropDownListFor(m => m.Period, new SelectList(Model.Period, "Id", "Name"), "Vælg måned", new { @class = "dropdown", @onchange = "SelectionChanged(this.value)" })
-        @Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId }, new { @class = "btn btn-default my-btn" })
+        @Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId, siteId = 1 }, new { @class = "btn btn-default my-btn" })
     </div>
 
     <table class="table-striped">

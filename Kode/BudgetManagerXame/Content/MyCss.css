@@ -90,3 +90,25 @@
         color: white;
         text-decoration: none;
     }
+.head{
+    width:75px;
+}
+.head-cat {
+    width: 175px;
+}
+.container-fluid{
+    margin-left: 50px;
+    margin-right:50px;
+}
+.my-border-row
+{
+    border-bottom:solid 1px black;
+
+}
+.my-border-div {
+    border-right: solid 1px black;
+}
+.row{
+    margin-left: -8px;
+    margin-right: -8px;
+}

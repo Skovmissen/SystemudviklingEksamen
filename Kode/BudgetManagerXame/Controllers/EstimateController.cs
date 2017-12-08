@@ -108,6 +108,8 @@ namespace BudgetManagerXame.Controllers
             estimate.FinanceGroup = DB.GetAllFinanceGroups();
             estimate.FinanceAccount = DB.GetAllFinanceAccounts(budgetId);
             ViewBag.Year = DB.GetBudgetYear(budgetId);
+            ViewBag.BudgetId = budgetId;
+            ViewBag.FiscalId = DB.GetFiscalId(budgetId);
             return View(estimate);
         }
         [HttpPost]
