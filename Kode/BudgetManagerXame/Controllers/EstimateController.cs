@@ -1,10 +1,15 @@
 ﻿using BudgetManagerXame.Classes;
 using BudgetManagerXame.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using System.Web.Script.Services;
 
 namespace BudgetManagerXame.Controllers
 {
@@ -55,6 +60,17 @@ namespace BudgetManagerXame.Controllers
 
 
         }
+        
+        public void test()
+        {
+            int accountId = Convert.ToInt32(Request["AccountId"]);
+            int budgetId = Convert.ToInt32(Request["BudgetId"]);
+            int periodId = Convert.ToInt32(Request["PeriodId"]);
+            double estimate = Convert.ToDouble(Request["Estimate"]);
+
+
+            DB.UpdateFinanceAccountsPeriod(accountId,periodId,budgetId,estimate);
+        }
 
         // GET: Estimate/Edit/5
         public ActionResult Edit()
@@ -102,7 +118,9 @@ namespace BudgetManagerXame.Controllers
         [HttpGet]
         public ActionResult Show(Estimate estimate, int budgetId)
         {
-            
+            int total = 0;
+            estimate.TotalDic = new Dictionary<int, int>();
+            estimate.TotalSumGroup = new Dictionary<string, int>();
             estimate.Period = DB.GetAllPeriods();
             estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId);
             estimate.FinanceGroup = DB.GetAllFinanceGroups();
@@ -110,6 +128,29 @@ namespace BudgetManagerXame.Controllers
             ViewBag.Year = DB.GetBudgetYear(budgetId);
             ViewBag.BudgetId = budgetId;
             ViewBag.FiscalId = DB.GetFiscalId(budgetId);
+            foreach (var item in estimate.FinanceAccount)
+            {
+                estimate.TotalDic.Add(item.AccountId, DB.GetSumOfEstimates(budgetId, item.AccountId));
+            }
+            foreach (var item in estimate.FinanceGroup)
+            {
+                estimate.TotalSumGroup.Add(item.Name, 0);
+
+            }
+            foreach (var item in estimate.FinanceAccount)
+            {
+                if (estimate.TotalSumGroup.ContainsKey(item.FinanceGroup))
+                {
+                    estimate.TotalSumGroup[item.FinanceGroup] = estimate.TotalSumGroup[item.FinanceGroup] + DB.GetSumOfEstimatesOnGroups(budgetId, item.AccountId);
+                }
+                else
+                {
+                    estimate.TotalSumGroup.Add(item.FinanceGroup, DB.GetSumOfEstimatesOnGroups(budgetId, item.AccountId));
+                }
+
+            }
+
+
             return View(estimate);
         }
         [HttpPost]

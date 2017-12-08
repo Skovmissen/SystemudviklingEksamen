@@ -83,6 +83,8 @@
     background-color: #9bae07;
     color: white;
     text-decoration: none;
+    margin-top:20px;
+    margin-bottom:20px;
 }
 
     .my-btn:hover {
@@ -95,7 +97,7 @@
     text-align: center;
 }
 .head-cat {
-    width: 175px;
+    width: 85px;;
 }
 .container-fluid{
     margin-left: 50px;
@@ -109,6 +111,7 @@
     height: 30px;
     margin-top: -8px;
     padding-top: 8px;
+    padding-left: 3px;
 }
 .row{
     margin-left: -8px;
@@ -123,3 +126,11 @@
     .table-bordered > tr > .head {
         text-align: center;
     }
+.my-td{
+    width:120px;
+}
+.head-cat-create {
+    width: 75px;
+    text-align: center;
+    font-size:22px;
+}

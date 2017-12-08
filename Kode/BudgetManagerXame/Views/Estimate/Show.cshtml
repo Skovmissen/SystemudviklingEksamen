@@ -11,7 +11,7 @@
             <th class="head-cat">
                 Budget år: @ViewBag.Year
             </th>
-            <th>Total</th>
+            <th class="head-cat">Total</th>
             @foreach (var period in Model.Period)
             {
                 <th class="head">@period.Name</th>
@@ -21,7 +21,17 @@
         {
             double total = 0;
             <tr>
-                <td><b>@group.Name</b></td>
+                <td class="my-td"><b>@group.Name</b></td>
+                @foreach (var item in Model.TotalSumGroup)
+                {
+                    if (item.Key == group.Name)
+                    {
+                        <td><b>@item.Value</b></td>
+                    }
+
+                }
+            
+                
                 @foreach (var per in Model.Period)
                 {
                     foreach (var account in Model.FinanceAccount)
@@ -41,6 +51,7 @@
 
 
                     }
+                    
                     <td class="text-right"><div class="row my-border-row"><div class="col-lg-6 my-border-div"><b>@total</b></div><div class="col-lg-6"><b>Diff</b></div></div><div class="row"><div class="col-lg-12 text-center">%</div></div></td>
                     total = 0;
                 }
@@ -55,6 +66,15 @@
                         <td>
                             @account.Name
                         </td>
+                        @foreach (var sum in Model.TotalDic)
+                        {
+                            if (sum.Key == account.AccountId)
+                            {
+                                <td>@sum.Value</td>
+                            }
+
+                        }
+                        
 
                         @foreach (var estimate in Model.Fap)
                         {

@@ -382,7 +382,65 @@ namespace BudgetManagerXame.Classes
             }
             return name;
         }
+        public static int GetSumOfEstimates(int budgetId, int accountId)
+        {
+            OpenDb();
+            SqlCommand command = new SqlCommand("SELECT SUM(Estimate) FROM FinanceAccountPeriod WHERE BudgetId = @budgetId AND AccountId = @accountId", connection);
+            command.Parameters.AddWithValue("@budgetId", budgetId);
+            command.Parameters.AddWithValue("@accountId", accountId);
+            try
+            {
+                int sum = Convert.ToInt32(command.ExecuteScalar().ToString());
+                CloseDb();
+                return sum;
 
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+        }
+        public static int GetSumOfEstimatesOnGroups(int budgetId, int accountId)
+        {
+            OpenDb();
+            SqlCommand command = new SqlCommand("SELECT SUM(Estimate) FROM FinanceAccountPeriod WHERE BudgetId = @budgetId AND AccountId = @accountId", connection);
+            command.Parameters.AddWithValue("@budgetId", budgetId);
+            command.Parameters.AddWithValue("@accountId", accountId);
+            try
+            {
+                int sum = Convert.ToInt32(command.ExecuteScalar().ToString());
+                CloseDb();
+                return sum;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public static string GetGroupNameFromAccountId(int budgetId, int accountId)
+        {
+            OpenDb();
+            SqlCommand command = new SqlCommand("SELECT FinancegroupName FROM FinanceAccount WHERE BudgetId = @budgetId AND AccountId = @accountId", connection);
+            command.Parameters.AddWithValue("@budgetId", budgetId);
+            command.Parameters.AddWithValue("@accountId", accountId);
+            try
+            {
+                string name = command.ExecuteScalar().ToString();
+                CloseDb();
+                return name;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
 
         private static SqlParameter CreateParam(string name, object value, SqlDbType type)
         {

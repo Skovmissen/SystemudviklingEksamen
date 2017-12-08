@@ -14,6 +14,7 @@ namespace BudgetManagerXame.Models
         public IList<FinanceGroup> FinanceGroup { get; set; }
         public IList<FinanceAccountPeriod> Fap { get; set; }
         public int[] Data { get; set; }
-        public Dictionary<string,int> TotalDic { get; set; }
+        public Dictionary<int,int> TotalDic { get; set; }
+        public Dictionary<string, int> TotalSumGroup { get; set; }
     }
 }
