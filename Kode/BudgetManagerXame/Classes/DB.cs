@@ -120,7 +120,8 @@ namespace BudgetManagerXame.Classes
         public static void CreateFinanceAccountsPeriod(int Accountid, int PeriodId, Budget budget) // Lavet af Lasse
         {
             OpenDb();
-            SqlCommand command = new SqlCommand("INSERT INTO FinanceAccountPeriod(AccountId, BudgetId, PeriodId, Estimate) VALUES (@AccountId, @BudgetId, @PeriodId, @Estimate)", connection);
+           
+            SqlCommand command = new SqlCommand("IF NOT EXISTS (SELECT * FROM FinanceAccountPeriod WHERE AccountId = @AccountId AND BudgetId = @BudgetId AND PeriodId = @PeriodId) INSERT INTO FinanceAccountPeriod(AccountId, BudgetId, PeriodId, Estimate) VALUES (@AccountId, @BudgetId, @PeriodId, @Estimate)", connection);
 
             command.Parameters.Add(CreateParam("@AccountId", Accountid, SqlDbType.Int));
             command.Parameters.Add(CreateParam("@BudgetId", budget.Id, SqlDbType.Int));

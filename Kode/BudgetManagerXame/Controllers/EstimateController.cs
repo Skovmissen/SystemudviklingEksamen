@@ -32,6 +32,8 @@ namespace BudgetManagerXame.Controllers
             estimate.FinanceAccount = DB.GetAllFinanceAccounts(budgetId);
             //estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId, periodId);
             ViewBag.PeriodId = estimate.Period[periodId - 1].Name;
+            ViewBag.BudgetId = budgetId;
+            ViewBag.FiscalId = DB.GetFiscalId(budgetId);
             return View(estimate);
         }
 
