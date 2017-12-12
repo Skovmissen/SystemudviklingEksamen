@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Opret" class="btn btn-default" />
+                    <input type="submit" id="opret" value="Opret" class="btn btn-default" />
                 </div>
             </div>
         </div>
@@ -39,3 +39,18 @@
     </div>
 
 </div>
+<div class="modal" style="display: none">
+    <div class="center"><img alt="" src="~/Content/ajax-loader.gif" /></div>
+
+</div>
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+            $('#opret').click(function () {
+                $(".modal").show();
+            });
+        });
+    </script>
+
+}

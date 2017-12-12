@@ -19,27 +19,32 @@ namespace BudgetManagerXame.Controllers
 
         public async Task<ActionResult> Index(Budget budget)
         {
-            var FiscalId = "";
-            var FirmName = "";
-            var content = await GetJsonString();
-            Dictionary<string, int> FirmList = new Dictionary<string, int>();
-            JObject jsonContent = JObject.Parse(content);
-
-            for (int i = 0; i < jsonContent.Count; i++)
-            {
-                FiscalId = jsonContent["Entities"][i].ToString();
-                FiscalId = jsonContent["Entities"][i]["FiscalSetupId"].ToString();
-
-                FirmName = jsonContent["Entities"][i].ToString();
-                FirmName = jsonContent["Entities"][i]["FiscalSetupName"].ToString();
-                FirmList.Add(FirmName, Convert.ToInt32(FiscalId));
-
-            }
-            budget.firmList = FirmList;
+            var firmInfo = await GetFirmInfoFromXena();
+            JObject jsonFirmInfo = JObject.Parse(firmInfo);
+            budget.firmList = AddFirmsToList(jsonFirmInfo);           
             return View(budget);
 
         }
-        public async Task<string> GetJsonString()
+
+        private static Dictionary<string, int> AddFirmsToList(JObject jsonContent)
+        {
+            Dictionary<string, int> FirmList = new Dictionary<string, int>();
+            string FiscalId = "";
+            string FirmName = "";
+
+            for (int i = 0; i < jsonContent.Count; i++)
+            {
+                FiscalId = jsonContent["Entities"][i]["FiscalSetupId"].ToString();
+                FirmName = jsonContent["Entities"][i]["FiscalSetupName"].ToString();
+
+                FirmList.Add(FirmName, Convert.ToInt32(FiscalId));
+
+            }
+
+            return FirmList;
+        }
+
+        public async Task<string> GetFirmInfoFromXena()
         {
             string token = Request.Cookies["access_token"].Value;
 
@@ -51,52 +56,21 @@ namespace BudgetManagerXame.Controllers
             return content;
 
         }
-        public async Task<ActionResult> BudgetList(Budget budget, string id)
+        public ActionResult BudgetList(Budget budget, string id, string firmName)
         {
-            var FiscalId = "";
-            var FirmName = "";
-            var content = await GetJsonString();
-            budget.firmId = Convert.ToInt32(id);
-            JObject jsonContent = JObject.Parse(content);
+            budget.Fiscalid = id;
+            budget.FirmName = firmName;
 
-            for (int i = 0; i < jsonContent.Count; i++)
-            {
-                //FiscalId = jsonContent["Entities"][i].ToString();
-
-                if (jsonContent["Entities"][i]["FiscalSetupId"].ToString() == id)
-                {
-                    FiscalId = jsonContent["Entities"][i]["FiscalSetupId"].ToString();
-                    //FirmName = jsonContent["Entities"][i].ToString();
-                    FirmName = jsonContent["Entities"][i]["FiscalSetupName"].ToString();
-                }
-                else
-                {
-
-                }
-            }
-
-            budget.Fiscalid = FiscalId.ToString();
-            budget.FirmName = FirmName.ToString();
-            ViewBag.Name = FirmName;
-
-            DataTable dt = DB.GetAllBudgets(FiscalId.ToString());
+            DataTable dt = DB.GetAllBudgets(id);
             budget.BudgetList = dt.AsEnumerable().ToList();
 
 
             return View(budget);
         }
-        // GET: Budget/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-
-        }
 
         // GET: Budget/Create
         public ActionResult Create(Budget budget)
         {
-
-
             return View(budget);
         }
         public async Task<string> GetFinanceAccounts(Budget budget)
@@ -114,13 +88,13 @@ namespace BudgetManagerXame.Controllers
 
         // POST: Budget/Create
         [HttpPost]
-        public async Task<ActionResult> Create(FormCollection collection, Budget budget, int id)
+        public async Task<ActionResult> Create(FormCollection collection, Budget budget, int fiscalId)
         {
             Estimate estimate = new Estimate();
-            estimate.Period = DB.GetAllPeriods();
+            
             try
             {
-
+                estimate.Period = DB.GetAllPeriods();
                 budget.Year = int.Parse(Request.Form["Year"]);
                 budget.Description = Request.Form["Description"];
 
@@ -128,12 +102,13 @@ namespace BudgetManagerXame.Controllers
 
                 await AddAccountsToBudget(budget, estimate);
 
-                return RedirectToAction("BudgetList", "Budget", new { @id = id });
+                return RedirectToAction("BudgetList", "Budget", new { @id = fiscalId });
             }
             catch (Exception e)
             {
-
-                return RedirectToAction("Error", e);
+                throw;
+                
+                //return RedirectToAction("Error", e);
             }
         }
         
@@ -206,35 +181,6 @@ namespace BudgetManagerXame.Controllers
             return View();
         }
         
-
-        // GET: Budget/Edit/5
-        public ActionResult Edit(int id)
-        {
-            Estimate estimate = new Estimate();
-
-            estimate.Period = DB.GetAllPeriods();
-            estimate.FinanceAccount = DB.GetAllFinanceAccounts(id);
-            estimate.FinanceGroup = DB.GetAllFinanceGroups();
-
-
-            return View(estimate);
-        }
-
-        // POST: Budget/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         // GET: Budget/Delete/5
         public ActionResult Delete(int id)
