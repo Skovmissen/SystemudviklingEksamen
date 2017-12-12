@@ -161,6 +161,8 @@ namespace BudgetManagerXame.Controllers
             var FinanceAccountId = "";
             var LedgerAccoount = "";
             var FinanceAccountDesc = "";
+            var Moms = "";
+            var ArticleId = "";
             var content = await GetFinanceAccounts(budget);
 
             JObject jsonContent = JObject.Parse(content);
@@ -172,14 +174,20 @@ namespace BudgetManagerXame.Controllers
                 FinanceAccountId = jsonContent["Entities"][i]["AccountNumber"].ToString();
                 FinanceAccountDesc = jsonContent["Entities"][i]["Description"].ToString();
                 LedgerAccoount = jsonContent["Entities"][i]["LedgerAccount"].ToString();
-                LedgerAccoount = DB.GetFinanceGroupName(LedgerAccoount);
-                if (FinanceAccountId == "" || FinanceAccountDesc == "" || LedgerAccoount == "" || LedgerAccoount == "tom")
+                Moms = jsonContent["Entities"][i]["LongDescription"].ToString();
+                ArticleId = jsonContent["Entities"][i]["ArticleGroupId"].ToString();
+                if (ArticleId == "")
                 {
-                    //ingen oprettelse uden _ID
+                    ArticleId = jsonContent["Entities"][i]["LedgerTagId"].ToString();
+                }
+                LedgerAccoount = DB.GetFinanceGroupName(LedgerAccoount);
+                if (FinanceAccountId == "" || FinanceAccountDesc == "" || LedgerAccoount == "" || LedgerAccoount == "tom" || Moms.Contains("Momsfri"))
+                {
+                    //ingen oprettelse
                 }
                 else
                 {
-                    DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), budget);
+                    DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), ArticleId, budget);
                 }
             }
             estimate.FinanceAccount = DB.GetAllFinanceAccounts(budget.Id);

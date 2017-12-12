@@ -7,16 +7,16 @@
 
 @using (Html.BeginForm())
 {
-        <div class="Dropdown_Month">
+    <div class="Dropdown_Month">
 
-            @Html.DropDownListFor(m => m.Period, new SelectList(Model.Period, "Id", "Name"), "Vælg måned", new { @class = "dropdown", @onchange = "SelectionChanged(this.value)" })
-            @Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId, siteId = 1 }, new { @class = "btn btn-default my-btn" })
-        </div>
+        @Html.DropDownListFor(m => m.Period, new SelectList(Model.Period, "Id", "Name"), "Vælg måned", new { @class = "dropdown", @onchange = "SelectionChanged(this.value)" })
+        @Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId, siteId = 1 }, new { @class = "btn btn-default my-btn" })
+    </div>
 
         <table class="table-striped">
             <tr>
                 <th>
-
+                    Alle tal skal inddaterees i tusinde
                 </th>
                 <th class="head-cat-create">
                     @ViewBag.PeriodId
@@ -42,14 +42,14 @@
                             <td>
                                 @Html.EditorFor(m => m.Fap[i].Estimate)
                                 @*@Html.HiddenFor(m => m.Fap[i].BudgetId)
-                                @Html.HiddenFor(m => m.Fap[i].PeriodId)
-                                @Html.HiddenFor(m => m.Fap[i].AccountId)*@
+                                    @Html.HiddenFor(m => m.Fap[i].PeriodId)
+                                    @Html.HiddenFor(m => m.Fap[i].AccountId)*@
                                 <input type="hidden" id="budgetId" value="@Model.Fap[i].BudgetId" />
                                 <input type="hidden" id="PeriodId" value="@Model.Fap[i].PeriodId" />
                                 <input type="hidden" id="AccountId" value="@Model.Fap[i].AccountId" />
 
                             </td>
-                           
+
                         }
 
                     </tr>
@@ -59,54 +59,37 @@
         </table>
         <input type="submit" value="Gem" class="btn btn-default my-btn" />
         @Html.ActionLink("Tilbage", "Index", "Budget", null, null)
-    }
+}
 
 @section scripts {
-    
-<script type="text/javascript">
-    var element = null;
-    $('input').on('blur', function () {
-        var inputId = this.id;
-        
-        console.log(inputId);
-        console.log($('[id*=' + inputId + ']').val());
-        console.log($(this).parent().children()[3].value);
-        var data = {};
-        data.Estimate = $('[id*=' + inputId + ']').val();
+
+    <script type="text/javascript">
+        var element = null;
+        $('input').on('blur', function () {
+            var inputId = this.id;
+
+            console.log(inputId);
+            console.log($('[id*=' + inputId + ']').val());
+            console.log($(this).parent().children()[3].value);
+            var data = {};
+            data.Estimate = $('[id*=' + inputId + ']').val();
             data.BudgetId = $('[id*=budgetId]').val();
             data.PeriodId = $('[id*=PeriodId]').val();
             data.AccountId = $(this).parent().children()[3].value;
             console.log("running AJAJAXJAJ");
             $.ajax({
                 type: "GET",
-                url: "/Estimate/test",
+                url: "/Estimate/UpdateDBNoRefresh",
                 data: data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json"
             });
         });
-</script>
-<script>
-        function SelectionChanged(val) {
-            id = document.getElementById("budgetId").value;
-            window.location.href = "/Estimate/Create?budgetId=" + id + "&periodId=" + val;
-        }
-
-        //$('input').on('blur', function () {
-        //    $('form').submit();
-        //});
-</script>
-}
-@*@section scripts {
-
+    </script>
     <script>
         function SelectionChanged(val) {
             id = document.getElementById("budgetId").value;
             window.location.href = "/Estimate/Create?budgetId=" + id + "&periodId=" + val;
         }
-
-        $('input').on('blur', function () {
-            $('form').submit();
-        });
     </script>
-}*@
+}

@@ -13,8 +13,12 @@ namespace BudgetManagerXame.Models
         public IList<FinanceAccount> FinanceAccount { get; set; }
         public IList<FinanceGroup> FinanceGroup { get; set; }
         public IList<FinanceAccountPeriod> Fap { get; set; }
+        public IList<XenaData> xena { get; set; }
         public int[] Data { get; set; }
         public Dictionary<int,int> TotalDic { get; set; }
         public Dictionary<string, int> TotalSumGroup { get; set; }
+        public DateTime? dateFrom { get; set; }
+        public DateTime? dateTo { get; set; }
+      
     }
 }

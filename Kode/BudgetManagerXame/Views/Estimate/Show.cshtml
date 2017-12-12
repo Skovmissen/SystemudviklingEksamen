@@ -5,11 +5,13 @@
 }
 @{
 
-    @Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId, siteId = 2 }, new { @class = "btn btn-default my-btn" })
+    <div class="col-lg-4">@Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId, siteId = 2 }, new { @class = "btn btn-default my-btn" })</div>
+
+
     <table class="table table-bordered">
         <tr>
             <th class="head-cat">
-                Budget år: @ViewBag.Year
+                Budget år: @ViewBag.Year : Alle tal er i tusinde
             </th>
             <th class="head-cat">Total</th>
             @foreach (var period in Model.Period)
@@ -20,18 +22,44 @@
         @foreach (var group in Model.FinanceGroup)
         {
             double total = 0;
+            double XenaTotal = 0;
+            int XenaTotalYear = 0;
+            int XenaAccountTotal = 0;
+            double AccountPercent = 0;
+            double GroupPercent = 0;
+            double percent = 0;
+            double AccountPeriodPercent = 0;
+            double amount = 0;
             <tr>
                 <td class="my-td"><b>@group.Name</b></td>
                 @foreach (var item in Model.TotalSumGroup)
                 {
                     if (item.Key == group.Name)
                     {
-                        <td><b>@item.Value</b></td>
-                    }
+                        <td class="text-right">
+                            <div class="row my-border-row">
+                                <div class="col-lg-6 my-border-div"><b>@item.Value</b></div>
+                                <div class="col-lg-6">
+                                    @{
+                                        foreach (var CD in ViewBag.CDList)
+                                        {
+                                            if (CD.GroupName == group.Name)
+                                            {
+                                                XenaTotalYear += CD.XenaAmount;
+                                            }
+                                        }
+                                        percent = Math.Round((XenaTotalYear / Convert.ToDouble(item.Value)) * 100);
+                                    }
+                                    <b>@XenaTotalYear</b>
+                                </div>
+                            </div>
+                            <div class="row"><div class="col-lg-12 text-center"><b>@percent %</b></div></div>
+                        </td>
+                                            }
 
-                }
-            
-                
+                                        }
+
+
                 @foreach (var per in Model.Period)
                 {
                     foreach (var account in Model.FinanceAccount)
@@ -43,6 +71,7 @@
                                 if (estimate.AccountId == account.AccountId && estimate.PeriodId == per.Id)
                                 {
                                     total += estimate.Estimate;
+
                                 }
 
                             }
@@ -51,44 +80,116 @@
 
 
                     }
-                    
-                    <td class="text-right"><div class="row my-border-row"><div class="col-lg-6 my-border-div"><b>@total</b></div><div class="col-lg-6"><b>Diff</b></div></div><div class="row"><div class="col-lg-12 text-center">%</div></div></td>
-                    total = 0;
-                }
+                    <td class="text-right">
+                        <div class="row my-border-row">
+                            <div class="col-lg-6 my-border-div"><b>@total</b></div><div class="col-lg-6">
+                                @{
+                                    foreach (var item in ViewBag.CDList)
+                                    {
+
+                                        if (group.Name == item.GroupName && per.Id == item.XenaPeriodId)
+                                        {
+                                            XenaTotal += item.XenaAmount;
+
+                                        }
+
+                                    }
+                                    GroupPercent = Math.Round((XenaTotal / total) * 100);
+                                }
+
+                                <b>@XenaTotal</b>
+
+                            </div>
+                        </div><div class="row"><div class="col-lg-12 text-center"><b>@GroupPercent %</b></div></div>
+                    </td>
+                                        total = 0;
+                                        XenaTotal = 0;
+                                    }
 
 
             </tr>
-            foreach (var account in Model.FinanceAccount)
-            {
-                if (account.FinanceGroup == group.Name)
-                {
-                    <tr>
-                        <td>
-                            @account.Name
-                        </td>
-                        @foreach (var sum in Model.TotalDic)
+                                    foreach (var account in Model.FinanceAccount)
+                                    {
+                                        if (account.FinanceGroup == group.Name)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @account.Name
+                                                </td>
+                                                @foreach (var sum in Model.TotalDic)
                         {
                             if (sum.Key == account.AccountId)
                             {
-                                <td>@sum.Value</td>
-                            }
+                                                        <td class="text-right">
+                                                            <div class="row my-border-row">
+                                                                <div class="col-lg-6 my-border-div">@sum.Value</div>
+                                                                <div class="col-lg-6">
+                                                                    @{
+                                                                        foreach (var CD in ViewBag.CDLIST)
+                                                                        {
+                                                                            if (account.AccountId == CD.XenaAccountId)
+                                                                            {
+                                                                                XenaAccountTotal += CD.XenaAmount;
+                                                                            }
+                                                                        }
+                                                                        AccountPercent = Math.Round((XenaAccountTotal / Convert.ToDouble(sum.Value)) * 100);
+                                                                    }
+                                                                    @XenaAccountTotal
 
-                        }
-                        
+                                                                </div>
+                                                            </div><div class="row"><div class="col-lg-12 text-center">@AccountPercent %</div></div>
+                                                        </td>
 
-                        @foreach (var estimate in Model.Fap)
+                                                                            }
+                                                                            XenaAccountTotal = 0;
+                                                                            AccountPercent = 0;
+
+                                                                        }
+
+
+                                                @foreach (var estimate in Model.Fap)
                         {
+
                             if (estimate.AccountId == account.AccountId)
                             {
-                                <td class="text-right"><div class="row my-border-row"><div class="col-lg-6 my-border-div">@estimate.Estimate</div><div class="col-lg-6">Diff</div> </div><div class="row"><div class="col-lg-12 text-center">%</div></div></td>
-                            }
 
-                        }
+                                                        <td class="text-right">
+                                                            <div class="row my-border-row">
+                                                                <div class="col-lg-6 my-border-div">@estimate.Estimate</div><div class="col-lg-6">
 
-                    </tr>
-                }
+                                                                    @{
+                                                                        foreach (var item in ViewBag.CDList)
+                                                                        {
+                                                                            if (estimate.AccountId == item.XenaAccountId && estimate.PeriodId == item.XenaPeriodId)
+                                                                            {
+                                                                                amount = item.XenaAmount;
+                                                                                @item.XenaAmount
+                                                                            }
 
-            }
-        }
+                                                                        }
+                                                                        AccountPeriodPercent = Math.Round((amount / estimate.Estimate) * 100);
+
+                                                                    }
+
+
+
+                                                                </div>
+                                                            </div><div class="row">
+                                                                <div class="col-lg-12 text-center">
+
+                                                                    @AccountPeriodPercent %
+
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                                            }
+
+                                                                        }
+
+                                            </tr>
+                                                                                }
+
+                                                                            }
+                                                                        }
     </table>
 }

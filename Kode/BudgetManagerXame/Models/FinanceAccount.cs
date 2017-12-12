@@ -11,5 +11,7 @@ namespace BudgetManagerXame.Models
         public string Name { get; set; }
         public string FinanceGroup { get; set; }
         public int BudgetId { get; set; }
+        public string ArticleId { get; set; }
+
     }
 }

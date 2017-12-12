@@ -78,15 +78,16 @@ namespace BudgetManagerXame.Classes
             }
         }
 
-        public static void CreateFinanceAccounts(int id, string name, string ledgerAccount, Budget budget) // Lavet af Lasse
+        public static void CreateFinanceAccounts(int id, string name, string ledgerAccount, string ArticleId, Budget budget) // Lavet af Lasse
         {
             OpenDb();
-            SqlCommand command = new SqlCommand("IF NOT EXISTS (SELECT * FROM FinanceAccount WHERE AccountId = @AccountId AND BudgetId = @BudgetId) INSERT INTO FinanceAccount (AccountId, Name, FinancegroupName, BudgetId) VALUES (@AccountId, @Name, @FinancegroupName, @BudgetId)", connection);
+            SqlCommand command = new SqlCommand("IF NOT EXISTS (SELECT * FROM FinanceAccount WHERE AccountId = @AccountId AND BudgetId = @BudgetId) INSERT INTO FinanceAccount (AccountId, ArticleId, Name, FinancegroupName, BudgetId) VALUES (@AccountId, @ArticleId, @Name, @FinancegroupName, @BudgetId)", connection);
 
             command.Parameters.Add(CreateParam("@AccountId", id, SqlDbType.Int));
             command.Parameters.Add(CreateParam("@Name", name, SqlDbType.NVarChar));
             command.Parameters.Add(CreateParam("@FinancegroupName", ledgerAccount, SqlDbType.NVarChar));
             command.Parameters.Add(CreateParam("@BudgetId", budget.Id, SqlDbType.Int));
+            command.Parameters.Add(CreateParam("@ArticleId", ArticleId, SqlDbType.NVarChar));
             try
             {
 
@@ -120,7 +121,7 @@ namespace BudgetManagerXame.Classes
         public static void CreateFinanceAccountsPeriod(int Accountid, int PeriodId, Budget budget) // Lavet af Lasse
         {
             OpenDb();
-           
+
             SqlCommand command = new SqlCommand("IF NOT EXISTS (SELECT * FROM FinanceAccountPeriod WHERE AccountId = @AccountId AND BudgetId = @BudgetId AND PeriodId = @PeriodId) INSERT INTO FinanceAccountPeriod(AccountId, BudgetId, PeriodId, Estimate) VALUES (@AccountId, @BudgetId, @PeriodId, @Estimate)", connection);
 
             command.Parameters.Add(CreateParam("@AccountId", Accountid, SqlDbType.Int));
@@ -261,6 +262,7 @@ namespace BudgetManagerXame.Classes
                     p.Name = (string)reader["Name"];
                     p.FinanceGroup = (string)reader["FinancegroupName"];
                     p.BudgetId = (int)reader["BudgetId"];
+                    p.ArticleId = (string)reader["ArticleId"];
                     Accounts.Add(p);
                 }
                 CloseDb();
@@ -271,6 +273,8 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
+
+
         public static List<FinanceAccountPeriod> GetAllFinanceAccountsEstimates(int BudgetId, int PeriodeId) // Lavet af Lasse
         {
             OpenDb();
@@ -382,6 +386,46 @@ namespace BudgetManagerXame.Classes
             }
             return name;
         }
+        public static string GetFinanceGroupLedger(string Name) // Lavet af Lasse
+        {
+            OpenDb();
+
+            SqlCommand command = new SqlCommand("SELECT LedgerAccount FROM FinanceGroup WHERE Name = @Name", connection);
+
+            command.Parameters.AddWithValue("@Name", Name);
+
+            try
+            {
+                string tag = command.ExecuteScalar().ToString();
+                CloseDb();
+                return tag;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        public static string GetAccountIdFromGroupName(string Name) // Lavet af Lasse
+        {
+            OpenDb();
+
+            SqlCommand command = new SqlCommand("SELECT AccountId FROM FinanceAccount WHERE FinancegroupName = @Name", connection);
+
+            command.Parameters.AddWithValue("@Name", Name);
+
+            try
+            {
+                string id = command.ExecuteScalar().ToString();
+                CloseDb();
+                return id;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
         public static int GetSumOfEstimates(int budgetId, int accountId)
         {
             OpenDb();
@@ -400,7 +444,7 @@ namespace BudgetManagerXame.Classes
 
                 throw;
             }
-            
+
         }
         public static int GetSumOfEstimatesOnGroups(int budgetId, int accountId)
         {
