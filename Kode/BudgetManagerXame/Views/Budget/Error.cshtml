@@ -3,5 +3,6 @@
     ViewBag.Title = "Error";
 }
 
-<h2>@ViewBag.error</h2>
+<h1>Uhhh ha', Den var ikke go'. Du har vidst lavet en fejl: @ViewBag.error</h1>
 
+@Html.ActionLink("Gå tilbage til starten", "Index", "Budget", null, new { @class = "btn" })

@@ -184,7 +184,7 @@ namespace BudgetManagerXame.Controllers
             }
         }
 
-        public ActionResult Error(Exception e)
+        public ActionResult Error(string e)
         {
             ViewBag.error = e;
             return View();
