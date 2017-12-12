@@ -91,10 +91,10 @@ namespace BudgetManagerXame.Controllers
         public async Task<ActionResult> Create(FormCollection collection, Budget budget, int fiscalId)
         {
             Estimate estimate = new Estimate();
-            estimate.Period = DB.GetAllPeriods();
+            
             try
             {
-
+                estimate.Period = DB.GetAllPeriods();
                 budget.Year = int.Parse(Request.Form["Year"]);
                 budget.Description = Request.Form["Description"];
 
@@ -104,7 +104,7 @@ namespace BudgetManagerXame.Controllers
 
                 return RedirectToAction("BudgetList", "Budget", new { @id = fiscalId });
             }
-            catch
+            catch (Exception e)
             {
                 throw;
                 
