@@ -3,7 +3,7 @@
     ViewBag.Title = "Budgets";
 }
 <div class="row">
-    <h2>Velkommen, <b>@ViewBag.Name !</b></h2>
+    <h2>Velkommen, <b>@Model.FirmName !</b></h2>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -27,7 +27,7 @@
         </tbody>
     </table>
 
-    @Html.ActionLink("Opret Nyt Budget", "Create", "Budget", new { fiscalId = Model.Fiscalid, id = Model.firmId }, new { @class = "Login-btn" })
+    @Html.ActionLink("Opret Nyt Budget", "Create", "Budget", new { fiscalId = Model.Fiscalid}, new { @class = "Login-btn" })
 </div>
 
 
