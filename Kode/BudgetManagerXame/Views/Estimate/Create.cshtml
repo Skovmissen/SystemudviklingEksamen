@@ -89,7 +89,7 @@
     <script>
         function SelectionChanged(val) {
             id = document.getElementById("budgetId").value;
-            window.location.href = "/Estimate/Create?budgetId=" + id + "&periodId=" + val;
+            window.location.href = "/Estimate/Create?budgetId=" + id + "&periodId=" + val + "&fiscalId=" + @ViewBag.FiscalId;
         }
     </script>
 }
