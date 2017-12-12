@@ -73,7 +73,7 @@ namespace BudgetManagerXame.Controllers
         {
             return View(budget);
         }
-        public async Task<string> GetFinanceAccounts(Budget budget)
+        public async Task<string> GetFinanceAccountsFromXena(Budget budget)
         {
             string token = Request.Cookies["access_token"].Value;
 
@@ -104,11 +104,9 @@ namespace BudgetManagerXame.Controllers
 
                 return RedirectToAction("BudgetList", "Budget", new { @id = fiscalId });
             }
-            catch (Exception e)
+            catch
             {
-                throw;
-                
-                //return RedirectToAction("Error", e);
+                return RedirectToAction("Error", new { e = "" });
             }
         }
         
@@ -133,15 +131,22 @@ namespace BudgetManagerXame.Controllers
         private async Task AddAccountsToBudget(Budget budget, Estimate estimate)
         {
 
+            var content = await GetFinanceAccountsFromXena(budget);
+
+            JObject jsonContent = JObject.Parse(content);
+            int items = jsonContent["Entities"].Count();
+
+            AddFinanceAccountToBudget(budget, jsonContent, items);
+            AddStartValueToFinanceAccountPeriod(budget, estimate);
+        }
+
+        private static void AddFinanceAccountToBudget(Budget budget, JObject jsonContent, int items)
+        {
             var FinanceAccountId = "";
             var LedgerAccoount = "";
             var FinanceAccountDesc = "";
             var Moms = "";
             var ArticleId = "";
-            var content = await GetFinanceAccounts(budget);
-
-            JObject jsonContent = JObject.Parse(content);
-            int items = jsonContent["Entities"].Count();
 
             for (int i = 0; i < items; i++)
             {
@@ -156,7 +161,7 @@ namespace BudgetManagerXame.Controllers
                     ArticleId = jsonContent["Entities"][i]["LedgerTagId"].ToString();
                 }
                 LedgerAccoount = DB.GetFinanceGroupName(LedgerAccoount);
-                if (FinanceAccountId == "" || FinanceAccountDesc == "" || LedgerAccoount == "" || LedgerAccoount == "tom" || Moms.Contains("Momsfri"))
+                if (FinanceAccountId == "" || FinanceAccountDesc == "" || LedgerAccoount == "" || Moms.Contains("Momsfri"))
                 {
                     //ingen oprettelse
                 }
@@ -165,6 +170,10 @@ namespace BudgetManagerXame.Controllers
                     DB.CreateFinanceAccounts(int.Parse(FinanceAccountId.ToString()), FinanceAccountDesc.ToString(), LedgerAccoount.ToString(), ArticleId, budget);
                 }
             }
+        }
+
+        private static void AddStartValueToFinanceAccountPeriod(Budget budget, Estimate estimate)
+        {
             estimate.FinanceAccount = DB.GetAllFinanceAccounts(budget.Id);
             foreach (var period in estimate.Period)
             {
