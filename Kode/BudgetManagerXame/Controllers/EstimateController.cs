@@ -4,9 +4,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -201,9 +203,8 @@ namespace BudgetManagerXame.Controllers
 
 
                 string tempYear = year.ToString();
-                DateTime dateFrom = Convert.ToDateTime(date.Key + "-" + tempYear);
-                DateTime dateTo = Convert.ToDateTime(date.Value + "-" + tempYear);
-
+                DateTime dateFrom = Convert.ToDateTime(date.Key + "-" + tempYear, CultureInfo.GetCultureInfo("en-GB").DateTimeFormat);
+                DateTime dateTo = Convert.ToDateTime(date.Value + "-" + tempYear, CultureInfo.GetCultureInfo("en-GB").DateTimeFormat);
                 var content = await GetJsonString(fiscalId, dateFrom.Date, dateTo.Date, year);
                 JObject jsonContent = JObject.Parse(content);
                 int items = jsonContent["Entities"].Count();
