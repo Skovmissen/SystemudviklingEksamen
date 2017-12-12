@@ -21,7 +21,7 @@
                     <td>@Html.ActionLink(item["Year"].ToString(), "Details", new { id = item["Id"] })</td>
                     <td>@item["Description"]</td>
                     <td></td>
-                    <td class="text-right">@Html.ActionLink("Inddatere", "Create", "Estimate", new { budgetId = item["Id"], periodId = 1 }, null) | @Html.ActionLink("Oversigt", "Show", "Estimate", new { budgetId = item["Id"], year = item["Year"], fiscalId = item["FiscalId"] }, null) | @Html.ActionLink("Redigere", "Edit", new { id = item["Id"] }) | @Html.ActionLink("Slet", "Delete", new { id = item["Id"] })  </td>
+                    <td class="text-right">@Html.ActionLink("Inddatere", "Create", "Estimate", new { budgetId = item["Id"], periodId = 1 }, null) | @Html.ActionLink("Oversigt", "Show", "Estimate", new { budgetId = item["Id"], year = item["Year"], fiscalId = item["FiscalId"] }, new { @class = "Oversigt" }) | @Html.ActionLink("Redigere", "Edit", new { id = item["Id"] }) | @Html.ActionLink("Slet", "Delete", new { id = item["Id"] })  </td>
                 </tr>
             }
         </tbody>
@@ -29,7 +29,30 @@
 
     @Html.ActionLink("Opret Nyt Budget", "Create", "Budget", new { fiscalId = Model.Fiscalid, id = Model.firmId }, new { @class = "Login-btn" })
 </div>
+<div class="modal" style="display: none">
+    <div class="center"><img alt="" src="~/Content/ajax-loader.gif" /></div>
 
+</div>
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+            $('.Oversigt').click(function () {
+                $(".modal").show();
+            });
+        });
+        //$(function () {
+        //    $("a").click(function () {
+        //        console.log("Jeg har trykket");
+        //        $(".modal").show();
+
+        //        complete: function () {
+        //            $(".modal").hide();
+        //        }
+        //    });
+    </script>
+
+}
 
 
 
