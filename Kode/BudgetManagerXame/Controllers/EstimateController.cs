@@ -122,6 +122,8 @@ namespace BudgetManagerXame.Controllers
         public async Task<string> GetJsonString(string fiscalId, DateTime dateFrom, DateTime dateTo, int budgetYear)
         {
             string fiscalPeriodId = "";
+            var periodContent = "";
+            string content = "";
             TimeSpan tempFrom;
             TimeSpan tempTo;
             string token = Request.Cookies["access_token"].Value;
@@ -129,8 +131,17 @@ namespace BudgetManagerXame.Controllers
             HttpClient _client = new HttpClient();
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            try
+            {
+                periodContent = await _client.GetStringAsync("https://my.xena.biz/Api/Fiscal/" + fiscalId + "/FiscalPeriod/");
+            }
+            catch
+            {
 
-            var periodContent = await _client.GetStringAsync("https://my.xena.biz/Api/Fiscal/98512/FiscalPeriod/");
+                RedirectToAction("Error", "Budget", null);
+            }
+
+
             JObject jsonContent = JObject.Parse(periodContent);
             int items = jsonContent["Entities"].Count();
             for (int i = 0; i < items; i++)
@@ -152,8 +163,15 @@ namespace BudgetManagerXame.Controllers
 
             double daysFrom = tempFrom.TotalDays;
             double daysTo = tempTo.TotalDays;
-            string content = await _client.GetStringAsync("https://my.xena.biz/Api/Fiscal/" + fiscalId + "/Transaction/LedgerAccountSpecificationReport?ForceNoPaging=false&Page=0&PageSize=100&ShowDeactivated=false&fiscalPeriodId=" + fiscalPeriodId + "&FiscalDateFrom=" + daysFrom + "&FiscalDateTo=" + daysTo + "&articleGroupId=&ledgerTagId=&vatId=&bearerId=&departmentId=&purposeId=&limitToArticleGroup=false&limitToLedgerTag=false&limitToVat=false&limitToBearer=false&limitToDepartment=false&limitToPurpose=false&_=1512993209273");
+            try
+            {
+                content = await _client.GetStringAsync("https://my.xena.biz/Api/Fiscal/" + fiscalId + "/Transaction/LedgerAccountSpecificationReport?ForceNoPaging=false&Page=0&PageSize=100&ShowDeactivated=false&fiscalPeriodId=" + fiscalPeriodId + "&FiscalDateFrom=" + daysFrom + "&FiscalDateTo=" + daysTo + "&articleGroupId=&ledgerTagId=&vatId=&bearerId=&departmentId=&purposeId=&limitToArticleGroup=false&limitToLedgerTag=false&limitToVat=false&limitToBearer=false&limitToDepartment=false&limitToPurpose=false&_=1512993209273");
+            }
+            catch
+            {
 
+                content = "";
+            }
 
             return content;
 
@@ -205,8 +223,16 @@ namespace BudgetManagerXame.Controllers
                 string tempYear = year.ToString();
                 DateTime dateFrom = Convert.ToDateTime(date.Key + "-" + tempYear, CultureInfo.GetCultureInfo("en-GB").DateTimeFormat);
                 DateTime dateTo = Convert.ToDateTime(date.Value + "-" + tempYear, CultureInfo.GetCultureInfo("en-GB").DateTimeFormat);
+
                 var content = await GetJsonString(fiscalId, dateFrom.Date, dateTo.Date, year);
+
+                if (content == "")
+                {
+                    return RedirectToAction("Error", "Budget",  new { e = "Xena har ingen data for dette budget år" });
+                }
+               
                 JObject jsonContent = JObject.Parse(content);
+               
                 int items = jsonContent["Entities"].Count();
 
 
@@ -222,7 +248,7 @@ namespace BudgetManagerXame.Controllers
                             CompareData CD = new CompareData();
                             double tempEnd = double.Parse(jsonContent["Entities"][i]["EndBalance"].ToString());
                             double tempStart = double.Parse(jsonContent["Entities"][i]["StartingBalance"].ToString());
-                            CD.XenaAmount = ((int)tempEnd- (int)tempStart) / 1000;
+                            CD.XenaAmount = ((int)tempEnd - (int)tempStart) / 1000;
                             CD.XenaAccountId = int.Parse(jsonContent["Entities"][i]["Number"].ToString());
                             CD.XenaPeriodId = periodCounter;
                             CD.GroupName = jsonContent["Entities"][i]["LedgerAccountTranslated"].ToString();
