@@ -19,6 +19,14 @@
                 <th class="head">@period.Name</th>
             }
         </tr>
+        <tr>
+            <td></td>
+            <td class="text-right"><div class="col-lg-6 my_header_div">Budget</div><div class="col-lg-6">Xena</div></td>
+            @foreach (var period in Model.Period)
+            {
+                <td class="text-right"><div class="col-lg-6 my_header_div">Budget</div><div class="col-lg-6">Xena</div></td>
+            }
+        </tr>
         @foreach (var group in Model.FinanceGroup)
         {
             double total = 0;

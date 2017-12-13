@@ -180,7 +180,12 @@ namespace BudgetManagerXame.Controllers
             ViewBag.error = e;
             return View();
         }
-        
+        public ActionResult LoginError(string e)
+        {
+            ViewBag.error = e;
+            return View();
+        }
+
 
         // GET: Budget/Delete/5
         public ActionResult Delete(int id)
