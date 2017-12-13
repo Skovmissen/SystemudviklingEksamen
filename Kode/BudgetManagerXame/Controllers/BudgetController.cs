@@ -20,8 +20,12 @@ namespace BudgetManagerXame.Controllers
         public async Task<ActionResult> Index(Budget budget)
         {
             var firmInfo = await GetFirmInfoFromXena();
+            if (firmInfo == "")
+            {
+               return RedirectToAction("LoginError", "Budget", new { e = "Kan ikke hente dine virksomheds informationer, er du logget ind?" });
+            }
             JObject jsonFirmInfo = JObject.Parse(firmInfo);
-            budget.firmList = AddFirmsToList(jsonFirmInfo);           
+            budget.firmList = AddFirmsToList(jsonFirmInfo);
             return View(budget);
 
         }
@@ -46,12 +50,30 @@ namespace BudgetManagerXame.Controllers
 
         public async Task<string> GetFirmInfoFromXena()
         {
-            string token = Request.Cookies["access_token"].Value;
-
+            string token = "";
+            string content = "";
+            
+            if (HttpContext.Request.Cookies["access_token"] == null)
+            {
+                return content;
+            }
+            else
+            {
+                 token = Request.Cookies["access_token"].Value;
+            }
             HttpClient _client = new HttpClient();
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string content = await _client.GetStringAsync("https://my.xena.biz/Api/User/XenaUserMembership?ForceNoPaging=true&Page=0&PageSize=10&ShowDeactivated=false");
+            try
+            {
+                content = await _client.GetStringAsync("https://my.xena.biz/Api/User/XenaUserMembership?ForceNoPaging=true&Page=0&PageSize=10&ShowDeactivated=false");
+            }
+            catch
+            {
+
+                content = "";
+            }
+
 
             return content;
 
@@ -91,7 +113,7 @@ namespace BudgetManagerXame.Controllers
         public async Task<ActionResult> Create(FormCollection collection, Budget budget, int fiscalId)
         {
             Estimate estimate = new Estimate();
-            
+
             try
             {
                 estimate.Period = DB.GetAllPeriods();
@@ -109,7 +131,7 @@ namespace BudgetManagerXame.Controllers
                 return RedirectToAction("Error", new { e = "" });
             }
         }
-        
+
         public async Task<ActionResult> Sync(Budget budget, int id, string FiscalId, int siteId)
         {
             Estimate estimate = new Estimate();
@@ -123,9 +145,9 @@ namespace BudgetManagerXame.Controllers
             }
             else
             {
-                return RedirectToAction("Show", "Estimate", new { @budgetid = id});
+                return RedirectToAction("Show", "Estimate", new { @budgetid = id });
             }
-            
+
         }
 
         private async Task AddAccountsToBudget(Budget budget, Estimate estimate)
@@ -209,7 +231,7 @@ namespace BudgetManagerXame.Controllers
         {
             string fiscalId = DB.GetFiscalId(id);
             DB.DeleteBudget(id);
-            
+
 
             return RedirectToAction("BudgetList", "Budget", new { id = fiscalId });
         }
