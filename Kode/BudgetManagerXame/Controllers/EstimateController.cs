@@ -32,9 +32,9 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Estimate/Create
-        public ActionResult Create(Estimate estimate, int budgetId, int periodId, int fiscalId)
+        public ActionResult Create(Estimate estimate, int budgetId, int periodId, int fiscalId, string firmName, int year)
         {
-
+            
             estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId, periodId);
             estimate.Period = DB.GetAllPeriods();
             estimate.FinanceGroup = DB.GetAllFinanceGroups();
@@ -43,6 +43,8 @@ namespace BudgetManagerXame.Controllers
             ViewBag.PeriodId = estimate.Period[periodId - 1].Name;
             ViewBag.BudgetId = budgetId;
             ViewBag.FiscalId = DB.GetFiscalId(budgetId);
+            ViewBag.Year = year;
+            ViewBag.FirmName = firmName;
             return View(estimate);
         }
 
@@ -76,49 +78,6 @@ namespace BudgetManagerXame.Controllers
             DB.UpdateFinanceAccountsPeriod(accountId, periodId, budgetId, estimate);
         }
 
-        // GET: Estimate/Edit/5
-        public ActionResult Edit()
-        {
-            return View();
-        }
-
-        // POST: Estimate/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Estimate/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Estimate/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
         public async Task<string> GetJsonString(string fiscalId, DateTime dateFrom, DateTime dateTo, int budgetYear)
         {
             string fiscalPeriodId = "";
@@ -177,7 +136,7 @@ namespace BudgetManagerXame.Controllers
 
         }
         [HttpGet]
-        public async Task<ActionResult> Show(Estimate estimate, int budgetId, int year, string fiscalId)
+        public async Task<ActionResult> Show(Estimate estimate, int budgetId, int year, string fiscalId, string firmName)
         {
 
 
@@ -190,6 +149,7 @@ namespace BudgetManagerXame.Controllers
             ViewBag.Year = DB.GetBudgetYear(budgetId);
             ViewBag.BudgetId = budgetId;
             ViewBag.FiscalId = DB.GetFiscalId(budgetId);
+            ViewBag.FirmName = firmName;
             foreach (var item in estimate.FinanceAccount)
             {
                 estimate.TotalDic.Add(item.AccountId, DB.GetSumOfEstimates(budgetId, item.AccountId));

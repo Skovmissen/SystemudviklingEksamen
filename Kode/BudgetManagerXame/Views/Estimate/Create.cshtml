@@ -10,7 +10,7 @@
     <div class="Dropdown_Month">
 
         @Html.DropDownListFor(m => m.Period, new SelectList(Model.Period, "Id", "Name"), "Vælg måned", new { @class = "dropdown", @onchange = "SelectionChanged(this.value)" })
-        @Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId, siteId = 1 }, new { @class = "btn btn-default my-btn" })
+        @Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId, siteId = 1, firmName = ViewBag.FirmName, year = ViewBag.Year }, new { @class = "btn btn-default my-btn" })
     </div>
 
     <table class="table-striped">
@@ -58,7 +58,7 @@
 
     </table>
         <input type="button" value="Gem" id="gem" class="btn btn-default my-btn" />
-        @Html.ActionLink("Tilbage", "Index", "Budget", null, null)
+        @Html.ActionLink("Tilbage", "BudgetList", "Budget", new { id = ViewBag.FiscalId, firmName = ViewBag.FirmName }, null)
 }
 
 @section scripts {

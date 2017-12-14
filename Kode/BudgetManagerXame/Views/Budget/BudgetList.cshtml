@@ -3,7 +3,7 @@
     ViewBag.Title = "Budgets";
 }
 <div class="row">
-    <h2>Velkommen, <b>@Model.FirmName !</b></h2>
+    <h2>Velkommen til, <b>@Model.FirmName</b>'s budgetter!</h2>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -18,10 +18,10 @@
             @foreach (var item in Model.BudgetList)
             {
                 <tr>
-                    <td>@Html.ActionLink(item["Year"].ToString(), "Details", new { id = item["Id"] })</td>
+                    <td>@item["Year"]</td>
                     <td>@item["Description"]</td>
                     <td></td>
-                    <td class="text-right">@Html.ActionLink("Inddatere", "Create", "Estimate", new { budgetId = item["Id"], periodId = 1, fiscalId = item["FiscalId"] }, null) | @Html.ActionLink("Oversigt", "Show", "Estimate", new { budgetId = item["Id"], year = item["Year"], fiscalId = item["FiscalId"] }, new { @class = "Oversigt" }) | @Html.ActionLink("Redigere", "Edit", new { id = item["Id"] }) | @Html.ActionLink("Slet", "Delete", new { id = item["Id"] })  </td>
+                    <td class="text-right">@Html.ActionLink("Inddatere", "Create", "Estimate", new { budgetId = item["Id"], periodId = 1, fiscalId = item["FiscalId"], firmName = Model.FirmName, year = item["Year"] }, null) | @Html.ActionLink("Oversigt", "Show", "Estimate", new { budgetId = item["Id"], year = item["Year"], fiscalId = item["FiscalId"], firmName = Model.FirmName }, new { @class = "Oversigt" }) | @Html.ActionLink("Slet", "Delete", new { id = item["Id"] })  </td>
                 </tr>
             }
         </tbody>

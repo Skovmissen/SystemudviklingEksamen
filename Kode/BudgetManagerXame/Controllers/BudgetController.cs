@@ -132,7 +132,7 @@ namespace BudgetManagerXame.Controllers
             }
         }
 
-        public async Task<ActionResult> Sync(Budget budget, int id, string FiscalId, int siteId)
+        public async Task<ActionResult> Sync(Budget budget, int id, string FiscalId, int siteId, int year, string firmName)
         {
             Estimate estimate = new Estimate();
             estimate.Period = DB.GetAllPeriods();
@@ -141,11 +141,12 @@ namespace BudgetManagerXame.Controllers
             await AddAccountsToBudget(budget, estimate);
             if (siteId == 1)
             {
-                return RedirectToAction("Create", "Estimate", new { @budgetid = id, @periodId = 1 });
+                return RedirectToAction("Create", "Estimate", new { @budgetid = id, @periodId = 1, @fiscalId = FiscalId, @firmName = firmName, @year = year});
             }
             else
             {
-                return RedirectToAction("Show", "Estimate", new { @budgetid = id });
+                return RedirectToAction("Show", "Estimate", new { @budgetid = id, @year = year, @fiscalId = FiscalId, @firmName = firmName });
+               
             }
 
         }
