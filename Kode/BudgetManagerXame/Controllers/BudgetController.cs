@@ -14,10 +14,8 @@ namespace BudgetManagerXame.Controllers
 {
     public class BudgetController : Controller
     {
-        // Lavet af Nikolaj
-        // GET: Budget
 
-        public async Task<ActionResult> Index(Budget budget)
+        public async Task<ActionResult> Index(Budget budget) // Af Nikolaj
         {
             var firmInfo = await GetFirmInfoFromXena();
             if (firmInfo == "")
@@ -35,8 +33,8 @@ namespace BudgetManagerXame.Controllers
             Dictionary<string, int> FirmList = new Dictionary<string, int>();
             string FiscalId = "";
             string FirmName = "";
-
-            for (int i = 0; i <= jsonContent.Count; i++)
+            int items = int.Parse(jsonContent["Count"].ToString());
+            for (int i = 0; i < items; i++)
             {
                 FiscalId = jsonContent["Entities"][i]["FiscalSetupId"].ToString();
                 FirmName = jsonContent["Entities"][i]["FiscalSetupName"].ToString();
@@ -78,7 +76,7 @@ namespace BudgetManagerXame.Controllers
             return content;
 
         }
-        public ActionResult BudgetList(Budget budget, string id, string firmName)
+        public ActionResult BudgetList(Budget budget, string id, string firmName) // Af Nikolaj
         {
             budget.Fiscalid = id;
             budget.FirmName = firmName;
@@ -91,7 +89,7 @@ namespace BudgetManagerXame.Controllers
         }
 
         // GET: Budget/Create
-        public ActionResult Create(Budget budget)
+        public ActionResult Create(Budget budget) // Af Patrick
         {
             return View(budget);
         }
@@ -110,7 +108,7 @@ namespace BudgetManagerXame.Controllers
 
         // POST: Budget/Create
         [HttpPost]
-        public async Task<ActionResult> Create(FormCollection collection, Budget budget, int fiscalId)
+        public async Task<ActionResult> Create(FormCollection collection, Budget budget, int fiscalId) // Af Patrick
         {
             Estimate estimate = new Estimate();
 
@@ -132,7 +130,7 @@ namespace BudgetManagerXame.Controllers
             }
         }
 
-        public async Task<ActionResult> Sync(Budget budget, int id, string FiscalId, int siteId, int year, string firmName)
+        public async Task<ActionResult> Sync(Budget budget, int id, string FiscalId, int siteId, int year, string firmName) // Af Lasse
         {
             Estimate estimate = new Estimate();
             estimate.Period = DB.GetAllPeriods();
@@ -151,7 +149,7 @@ namespace BudgetManagerXame.Controllers
 
         }
 
-        private async Task AddAccountsToBudget(Budget budget, Estimate estimate)
+        private async Task AddAccountsToBudget(Budget budget, Estimate estimate) // Af Lasse
         {
 
             var content = await GetFinanceAccountsFromXena(budget);
@@ -195,7 +193,7 @@ namespace BudgetManagerXame.Controllers
             }
         }
 
-        private static void AddStartValueToFinanceAccountPeriod(Budget budget, Estimate estimate)
+        private static void AddStartValueToFinanceAccountPeriod(Budget budget, Estimate estimate) // Af Lasse
         {
             estimate.FinanceAccount = DB.GetAllFinanceAccounts(budget.Id);
             foreach (var period in estimate.Period)
@@ -207,12 +205,12 @@ namespace BudgetManagerXame.Controllers
             }
         }
 
-        public ActionResult Error(string e)
+        public ActionResult Error(string e) // Af Nikolaj
         {
             ViewBag.error = e;
             return View();
         }
-        public ActionResult LoginError(string e)
+        public ActionResult LoginError(string e) // Af Nikolaj
         {
             ViewBag.error = e;
             return View();
@@ -220,7 +218,7 @@ namespace BudgetManagerXame.Controllers
 
 
         // GET: Budget/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id) // Af Lasse
         {
             Budget budget = DB.GetBudget(id);
             return View(budget);

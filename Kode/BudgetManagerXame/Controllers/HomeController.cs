@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace BudgetManagerXame.Controllers
+namespace BudgetManagerXame.Controllers 
 {
+    // af: Nikolaj
     public class HomeController : Controller
     {
         public ActionResult Index()

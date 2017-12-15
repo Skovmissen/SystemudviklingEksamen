@@ -161,8 +161,6 @@
     <Compile Include="Controllers\BudgetController.cs" />
     <Compile Include="Controllers\EstimateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\TempController.cs" />
-    <Compile Include="Controllers\XenaAPIController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -262,8 +260,6 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Budget\Index.cshtml" />
-    <Content Include="Views\Temp\Delete.cshtml" />
-    <Content Include="Views\Temp\Index.cshtml" />
     <Content Include="Views\Budget\Create.cshtml" />
     <Content Include="Views\Budget\Error.cshtml" />
     <Content Include="Views\Budget\Delete.cshtml" />

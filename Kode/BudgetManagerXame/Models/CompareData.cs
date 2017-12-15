@@ -5,7 +5,7 @@ using System.Web;
 
 namespace BudgetManagerXame.Models
 {
-    public class CompareData
+    public class CompareData //af Anders
     {
         public int XenaAmount { get; set; }
         public int XenaPeriodId { get; set; }

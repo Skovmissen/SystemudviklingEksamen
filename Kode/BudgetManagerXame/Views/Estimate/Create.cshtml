@@ -10,7 +10,7 @@
     <div class="Dropdown_Month">
 
         @Html.DropDownListFor(m => m.Period, new SelectList(Model.Period, "Id", "Name"), "Vælg måned", new { @class = "dropdown", @onchange = "SelectionChanged(this.value)" })
-        @Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId, siteId = 1, firmName = ViewBag.FirmName, year = ViewBag.Year }, new { @class = "btn btn-default my-btn" })
+        @Html.ActionLink("Synkroniser konti", "Sync", "Budget", new { id = ViewBag.BudgetId, FiscalId = ViewBag.FiscalId, siteId = 1, firmName = ViewBag.FirmName, year = ViewBag.Year }, new { @class = "btn btn-default my-btn", @id = "Sync-btn" })
     </div>
 
     <table class="table-striped">
@@ -60,6 +60,10 @@
         <input type="button" value="Gem" id="gem" class="btn btn-default my-btn" />
         @Html.ActionLink("Tilbage", "BudgetList", "Budget", new { id = ViewBag.FiscalId, firmName = ViewBag.FirmName }, null)
 }
+<div class="modal" style="display: none">
+    <div class="center"><img alt="" src="~/Content/ajax-loader.gif" /></div>
+
+</div>
 
 @section scripts {
 
@@ -112,7 +116,14 @@
     <script>
         function SelectionChanged(val) {
             id = document.getElementById("budgetId").value;
-            window.location.href = "/Estimate/Create?budgetId=" + id + "&periodId=" + val + "&fiscalId=" + @ViewBag.FiscalId;
+            window.location.href = "/Estimate/Create?budgetId=" + id + "&periodId=" + val + "&fiscalId=" + @ViewBag.FiscalId + "&year=" + @ViewBag.Year;
         }
+</script>
+<script>
+          $(document).ready(function () {
+              $('#Sync-btn').click(function () {
+                  $(".modal").show();
+              });
+          });
 </script>
 }
