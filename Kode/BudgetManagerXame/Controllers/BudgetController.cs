@@ -36,7 +36,7 @@ namespace BudgetManagerXame.Controllers
             string FiscalId = "";
             string FirmName = "";
 
-            for (int i = 0; i < jsonContent.Count; i++)
+            for (int i = 0; i <= jsonContent.Count; i++)
             {
                 FiscalId = jsonContent["Entities"][i]["FiscalSetupId"].ToString();
                 FirmName = jsonContent["Entities"][i]["FiscalSetupName"].ToString();
@@ -66,7 +66,7 @@ namespace BudgetManagerXame.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             try
             {
-                content = await _client.GetStringAsync("https://my.xena.biz/Api/User/XenaUserMembership?ForceNoPaging=true&Page=0&PageSize=10&ShowDeactivated=false");
+                content = await _client.GetStringAsync("https://my.xena.biz/Api/User/XenaUserMembership?ForceNoPaging=true&ShowDeactivated=false");
             }
             catch
             {
