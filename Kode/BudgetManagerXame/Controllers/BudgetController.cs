@@ -35,8 +35,8 @@ namespace BudgetManagerXame.Controllers
             Dictionary<string, int> FirmList = new Dictionary<string, int>();
             string FiscalId = "";
             string FirmName = "";
-
-            for (int i = 0; i <= jsonContent.Count; i++)
+            int items = int.Parse(jsonContent["Count"].ToString());
+            for (int i = 0; i < items; i++)
             {
                 FiscalId = jsonContent["Entities"][i]["FiscalSetupId"].ToString();
                 FirmName = jsonContent["Entities"][i]["FiscalSetupName"].ToString();
