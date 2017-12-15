@@ -38,7 +38,7 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static int CreateBudget(Budget budget) // Lavet af Lasse
+        public static int CreateBudget(Budget budget) // Lavet af Nikolaj
         {
             OpenDb();
             object id;
@@ -59,7 +59,7 @@ namespace BudgetManagerXame.Classes
             return Convert.ToInt32(id);
         }
 
-        public static string GetFiscalId(int id) // Lavet af Lasse
+        public static string GetFiscalId(int id) // Lavet af Nikolaj
         {
             OpenDb();
             SqlCommand command = new SqlCommand("SELECT FiscalId From Budget WHERE Id = @id ", connection);
@@ -100,7 +100,7 @@ namespace BudgetManagerXame.Classes
             }
         }
 
-        public static int GetBudgetYear(int budgetId)
+        public static int GetBudgetYear(int budgetId) //af Anders
         {
             OpenDb();
             SqlCommand command = new SqlCommand("SELECT Year From Budget WHERE Id = @budgetId ", connection);
@@ -139,7 +139,7 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static void UpdateFinanceAccountsPeriod(int Accountid, int PeriodId, int budgetId, double estimate) // Lavet af Lasse
+        public static void UpdateFinanceAccountsPeriod(int Accountid, int PeriodId, int budgetId, double estimate) //af Anders
         {
             OpenDb();
             SqlCommand command = new SqlCommand("UPDATE FinanceAccountPeriod SET Estimate = @Estimate WHERE BudgetId = @BudgetId AND AccountId = @AccountId AND PeriodId = @PeriodId", connection);
@@ -160,7 +160,7 @@ namespace BudgetManagerXame.Classes
             }
         }
 
-        public static void DeleteBudget(int? id)
+        public static void DeleteBudget(int? id) // af Lasse
         {
             OpenDb();
             SqlCommand command = new SqlCommand("DELETE FROM Budget WHERE Id = @id", connection);
@@ -246,7 +246,7 @@ namespace BudgetManagerXame.Classes
             }
         }
 
-        public static List<FinanceAccount> GetAllFinanceAccounts(int id) // Lavet af Lasse
+        public static List<FinanceAccount> GetAllFinanceAccounts(int id) // Lavet af Nikolaj
         {
             OpenDb();
             List<FinanceAccount> Accounts = new List<FinanceAccount>();
@@ -302,7 +302,7 @@ namespace BudgetManagerXame.Classes
                 throw ex;
             }
         }
-        public static List<FinanceAccountPeriod> GetAllFinanceAccountsEstimates(int BudgetId) // Lavet af Lasse
+        public static List<FinanceAccountPeriod> GetAllFinanceAccountsEstimates(int BudgetId) // Lavet af Anders
         {
             OpenDb();
             List<FinanceAccountPeriod> Accounts = new List<FinanceAccountPeriod>();
@@ -426,7 +426,7 @@ namespace BudgetManagerXame.Classes
             }
 
         }
-        public static int GetSumOfEstimates(int budgetId, int accountId)
+        public static int GetSumOfEstimates(int budgetId, int accountId) //af Anders
         {
             OpenDb();
             SqlCommand command = new SqlCommand("SELECT SUM(Estimate) FROM FinanceAccountPeriod WHERE BudgetId = @budgetId AND AccountId = @accountId", connection);
@@ -446,7 +446,7 @@ namespace BudgetManagerXame.Classes
             }
 
         }
-        public static int GetSumOfEstimatesOnGroups(int budgetId, int accountId)
+        public static int GetSumOfEstimatesOnGroups(int budgetId, int accountId) //af Patrick
         {
             OpenDb();
             SqlCommand command = new SqlCommand("SELECT SUM(Estimate) FROM FinanceAccountPeriod WHERE BudgetId = @budgetId AND AccountId = @accountId", connection);
@@ -465,7 +465,7 @@ namespace BudgetManagerXame.Classes
                 throw;
             }
         }
-        public static string GetGroupNameFromAccountId(int budgetId, int accountId)
+        public static string GetGroupNameFromAccountId(int budgetId, int accountId) // af Nikolaj
         {
             OpenDb();
             SqlCommand command = new SqlCommand("SELECT FinancegroupName FROM FinanceAccount WHERE BudgetId = @budgetId AND AccountId = @accountId", connection);

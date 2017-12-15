@@ -6,7 +6,7 @@ using System.Web;
 
 namespace BudgetManagerXame.Models
 {
-    public class Estimate
+    public class Estimate //af Anders
     {
         public IList<Period> Period { get; set; }
         public IList<Budget> Budget { get; set; }

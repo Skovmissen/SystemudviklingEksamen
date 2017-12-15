@@ -17,24 +17,13 @@ using System.Web.Script.Services;
 
 namespace BudgetManagerXame.Controllers
 {
-    public class EstimateController : Controller
+    public class EstimateController : Controller // Af Nikolaj & Lasse
     {
-        // GET: Estimate
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        // GET: Estimate/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
         // GET: Estimate/Create
         public ActionResult Create(Estimate estimate, int budgetId, int periodId, int fiscalId, string firmName, int year)
         {
-            
+
             estimate.Fap = DB.GetAllFinanceAccountsEstimates(budgetId, periodId);
             estimate.Period = DB.GetAllPeriods();
             estimate.FinanceGroup = DB.GetAllFinanceGroups();
@@ -188,11 +177,11 @@ namespace BudgetManagerXame.Controllers
 
                 if (content == "")
                 {
-                    return RedirectToAction("Error", "Budget",  new { e = "Xena har ingen data for dette budget år" });
+                    return RedirectToAction("Error", "Budget", new { e = "Xena har ingen data for dette budget år" });
                 }
-               
+
                 JObject jsonContent = JObject.Parse(content);
-               
+
                 int items = jsonContent["Entities"].Count();
 
 
@@ -250,12 +239,6 @@ namespace BudgetManagerXame.Controllers
 
 
             return Dates;
-        }
-        [HttpPost]
-        public ActionResult Show()
-        {
-
-            return View();
         }
     }
 }

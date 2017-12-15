@@ -5,7 +5,7 @@ using System.Web;
 
 namespace BudgetManagerXame.Models
 {
-    public class FinanceAccount
+    public class FinanceAccount //af Anders
     {
         public int AccountId { get; set; }
         public string Name { get; set; }
